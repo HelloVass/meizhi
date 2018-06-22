@@ -1,21 +1,20 @@
 package info.hellovass.meizhi
 
-import android.app.Application
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import info.hellovass.meizhi.main.MainRepo
 import info.hellovass.meizhi.main.MainVM
 
-class VMFactory private constructor(private val application: Application) : ViewModelProvider.NewInstanceFactory() {
+class VMFactory private constructor() : ViewModelProvider.Factory {
 
     companion object {
 
         private var sINSTANCE: VMFactory? = null
 
-        fun getInstance(application: Application): VMFactory {
+        fun getInstance(): VMFactory {
 
             return sINSTANCE ?: synchronized(VMFactory::class.java) {
-                sINSTANCE ?: VMFactory(application)
+                sINSTANCE ?: VMFactory()
                         .also { sINSTANCE = it }
             }
         }
@@ -27,7 +26,7 @@ class VMFactory private constructor(private val application: Application) : View
 
                 when {
                     isAssignableFrom(MainVM::class.java) ->
-                        MainVM(application, MainRepo())
+                        MainVM(MainRepo())
                     else ->
                         throw IllegalArgumentException("未知 ViewModel")
                 }

@@ -1,4 +1,4 @@
-package info.hellovass.meizhi.net
+package info.hellovass.meizhi.lib.network
 
 import io.reactivex.schedulers.Schedulers
 import okhttp3.Interceptor

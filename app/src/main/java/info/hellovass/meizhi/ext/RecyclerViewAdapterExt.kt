@@ -5,8 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-
-fun <VH : RecyclerView.ViewHolder> RecyclerView.Adapter<VH>.inflate(layoutId: Int, parent: ViewGroup, attachToRoot: Boolean): View {
+fun RecyclerView.Adapter<*>.inflate(layoutId: Int, parent: ViewGroup, attachToRoot: Boolean): View {
 
     return LayoutInflater.from(parent.context).inflate(layoutId, parent, attachToRoot)
 }

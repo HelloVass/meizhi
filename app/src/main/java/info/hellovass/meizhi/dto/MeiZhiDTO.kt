@@ -1,7 +1,7 @@
-package info.hellovass.meizhi.data
+package info.hellovass.meizhi.dto
 
 
-data class MeiZhi(
+data class MeiZhiDTO(
         val _id: String,
         val createdAt: String,
         val desc: String,
@@ -10,5 +10,5 @@ data class MeiZhi(
         val type: String,
         val url: String,
         val used: Boolean,
-        val who: Any
+        val who: String
 )

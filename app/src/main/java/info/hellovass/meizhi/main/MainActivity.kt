@@ -2,70 +2,79 @@ package info.hellovass.meizhi.main
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import info.hellovass.meizhi.R
-import info.hellovass.meizhi.data.MeiZhi
-import info.hellovass.meizhi.net.Status
-import info.hellovass.meizhi.ext.bindPuller
-import info.hellovass.meizhi.ext.obtainViewModel
-import info.hellovass.meizhi.lib.LinearLayoutManagerDelegate
-import info.hellovass.meizhi.net.Resource
+import info.hellovass.meizhi.dto.MeiZhiDTO
+import info.hellovass.meizhi.ext.createVM
+import info.hellovass.meizhi.lib.network.Resource
+import info.hellovass.meizhi.lib.network.Status
+import info.hellovass.planner.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
-    private val mMainVM: MainVM by lazy {
+    private lateinit var mainVM: MainVM
 
-        this.obtainViewModel(MainVM::class.java)
+    private lateinit var meiZhisAdapter: MeiZhisAdapter
+
+    override fun getLayoutResId(): Int {
+
+        return R.layout.activity_main
     }
 
-    private val mMeiZhisAdapter: MeiZhisAdapter by lazy {
+    override fun obtainVM() {
 
-        MeiZhisAdapter()
+        mainVM = createVM(MainVM::class.java)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun initData(savedInstanceState: Bundle?) {
 
-        setupRcv()
+        refreshLayout.apply {
 
-        observeData()
-    }
+            setOnRefreshListener(mainVM.provideOnRefreshListener())
+        }
 
-    private fun setupRcv() {
 
         rcvList.apply {
 
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = mMeiZhisAdapter
 
-            this.bindPuller(LinearLayoutManagerDelegate(LinearLayoutManager(context)), loadMoreHandler = {
+            addOnScrollListener(mainVM.provideOnScrollListener())
 
-                mMainVM.getMeiZhis()
-            })
+            meiZhisAdapter = MeiZhisAdapter(mainVM.meiZhisDataSet)
+            adapter = meiZhisAdapter
         }
+
+        mainVM.loadData(1)
     }
 
-    private fun observeData() {
+    override fun observeData() {
 
-        mMainVM.meizhis.observe(this, Observer<Resource<List<MeiZhi>>> { response -> handleResponse(response) })
+        mainVM.meiZhisObservable.observe(this, Observer<Resource<List<MeiZhiDTO>>> {
+
+            it?.let {
+
+                handleResult(it)
+            }
+        })
     }
 
-    private fun handleResponse(reponse: Resource<List<MeiZhi>>?) {
+    private fun handleResult(resource: Resource<List<MeiZhiDTO>>) {
 
-        when (reponse?.status) {
+        when (resource.status) {
 
             Status.SUCCESS -> {
 
-                mMeiZhisAdapter.setDatas(reponse.data)
-            }
+                resource.data?.let {
 
+                    val result = DiffUtil.calculateDiff(DiffCallBack(meiZhisAdapter.datas, it))
+                    result.dispatchUpdatesTo(meiZhisAdapter)
+                }
+            }
             Status.ERROR -> {
 
             }
-
             Status.LOADING -> {
 
             }

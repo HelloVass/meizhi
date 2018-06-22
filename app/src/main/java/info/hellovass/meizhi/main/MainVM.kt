@@ -1,26 +1,63 @@
 package info.hellovass.meizhi.main
 
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
-import info.hellovass.meizhi.data.MeiZhi
-import info.hellovass.meizhi.net.Resource
-import info.hellovass.meizhi.net.RxSchedulerHelper
+import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import info.hellovass.meizhi.base.BaseVM
+import info.hellovass.meizhi.dto.MeiZhiDTO
+import info.hellovass.meizhi.lib.network.Resource
+import info.hellovass.meizhi.lib.network.RxSchedulerHelper
 
-class MainVM(private val context: Application, private val mainRepo: MainRepo) : AndroidViewModel(context) {
+class MainVM(private val mainRepo: MainRepo) : BaseVM() {
 
-    val meizhis: MutableLiveData<Resource<List<MeiZhi>>> by lazy {
+    val meiZhisObservable = MutableLiveData<Resource<List<MeiZhiDTO>>>()
 
-        MutableLiveData<Resource<List<MeiZhi>>>()
+    val meiZhisDataSet = mutableListOf<MeiZhiDTO>()
+
+    fun provideOnRefreshListener(): SwipeRefreshLayout.OnRefreshListener? {
+
+        return SwipeRefreshLayout.OnRefreshListener {
+
+            loadData(1)
+        }
     }
 
-    /**
-     * 获取小姐姐列表
-     */
-    fun getMeiZhis(count: Int = 10, page: Int = 1) {
+    fun provideOnScrollListener(): RecyclerView.OnScrollListener? {
 
-        mainRepo.getMeiZhis(count, page)
+        return object : RecyclerView.OnScrollListener() {
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+
+                val viewLayoutManager = (recyclerView?.layoutManager as LinearLayoutManager)
+
+                if (viewLayoutManager.findFirstCompletelyVisibleItemPosition()
+                        >= viewLayoutManager.itemCount - 1) {
+
+                    loadData(1)
+                }
+            }
+        }
+    }
+
+    fun loadData(page: Int) {
+
+        mainRepo.getMeiZhis(count = 10, page = page)
                 .compose(RxSchedulerHelper.io2main())
-                .subscribe({ response -> meizhis.value = response }, { throwable -> meizhis.value = Resource.error(throwable?.message) })
+                .doOnSubscribe({ meiZhisObservable.postValue(Resource.loading()) })
+                .subscribe({ data ->
+
+                    if (page == 1) {
+
+                        meiZhisDataSet.clear()
+                    }
+
+                    data?.let {
+
+                        meiZhisDataSet.addAll(data)
+                        meiZhisObservable.postValue(Resource.success(data))
+                    }
+                }, { error -> meiZhisObservable.postValue(Resource.error(error.message)) })
     }
 }
+

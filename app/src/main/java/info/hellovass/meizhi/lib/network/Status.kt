@@ -1,4 +1,4 @@
-package info.hellovass.meizhi.net
+package info.hellovass.meizhi.lib.network
 
 enum class Status {
 

@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.support.v4.app.FragmentActivity
 import info.hellovass.meizhi.VMFactory
 
-fun <T : ViewModel> FragmentActivity.obtainViewModel(modelClass: Class<T>): T {
+fun <T : ViewModel> FragmentActivity.createVM(modelClass: Class<T>): T {
 
-    return ViewModelProviders.of(this, VMFactory.getInstance(application)).get(modelClass)
+    return ViewModelProviders.of(this, VMFactory.getInstance()).get(modelClass)
 }

@@ -1,4 +1,4 @@
-package info.hellovass.meizhi.net
+package info.hellovass.meizhi.lib.network
 
 data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
 
@@ -9,14 +9,14 @@ data class Resource<out T>(val status: Status, val data: T?, val message: String
             return Resource(Status.SUCCESS, data, null)
         }
 
-        fun <T> error(msg: String?, data: T?): Resource<T> {
+        fun <T> error(msg: String?): Resource<T> {
 
-            return Resource(Status.ERROR, data, msg)
+            return Resource(Status.ERROR, null, msg)
         }
 
-        fun <T> loading(data: T?): Resource<T> {
+        fun <T> loading(): Resource<T> {
 
-            return Resource(Status.LOADING, data, null)
+            return Resource(Status.LOADING, null, null)
         }
     }
 }
