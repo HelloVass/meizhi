@@ -1,20 +1,22 @@
 package info.hellovass.meizhi.lib.network
 
+import io.reactivex.Observable
+import io.reactivex.ObservableTransformer
 import io.reactivex.Single
 import io.reactivex.SingleTransformer
 
 object RxResultHandler {
 
-    fun <T> handleResult(): SingleTransformer<Result<T>, T> {
+    fun <T> handleResult(): ObservableTransformer<Result<T>, T> {
 
-        return SingleTransformer { upstream ->
+        return ObservableTransformer { upstream ->
 
             upstream.flatMap { (error, results) ->
 
                 if (!error)
-                    Single.just(results)
+                    Observable.just(results)
                 else
-                    Single.error(Throwable("服务器发生错误"))
+                    Observable.error(Throwable("服务器发生错误"))
             }
         }
     }

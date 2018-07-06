@@ -9,73 +9,43 @@ import info.hellovass.meizhi.dto.MeiZhiDTO
 import info.hellovass.meizhi.ext.inflate
 import kotlinx.android.synthetic.main.listitem_meizhis.view.*
 
+class MeiZhisAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-class MeiZhisAdapter(val datas: List<MeiZhiDTO>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val meizhis: MutableList<MeiZhiDTO> = mutableListOf()
 
-    companion object {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        private const val LOADMORE: Int = 1
-
-        private const val ITEM: Int = 2
+        return MeiZhiVH(inflate(R.layout.listitem_meizhis, parent, false))
     }
 
-    override fun getItemCount(): Int = datas.size + 1
+    override fun getItemCount(): Int {
 
-    override fun getItemViewType(position: Int): Int {
-
-        return if (position >= itemCount) {
-
-            LOADMORE
-        } else {
-
-            ITEM
-        }
+        return meizhis.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder = when (viewType) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        LOADMORE -> {
-
-            LoadMore(inflate(R.layout.listitem_load_more, parent, false))
-        }
-        else -> {
-
-            Item(inflate(R.layout.listitem_meizhis, parent, false))
-        }
+        (holder as MeiZhiVH).bind(meizhis[position], position)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) = when (getItemViewType(position)) {
+    fun insert(data: List<MeiZhiDTO>) {
 
-        LOADMORE -> {
-
-        }
-        else -> {
-
-            (holder as Item).bind(datas[position], position)
-        }
+        val startIndex: Int = meizhis.size
+        val itemCount: Int = data.count()
+        meizhis.addAll(data)
+        notifyItemRangeInserted(startIndex, itemCount)
     }
 
-    class Item(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MeiZhiVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(meiZhiDTO: MeiZhiDTO, position: Int) {
 
-            // 加载图片
-            itemView.ivCover.apply {
+            itemView.apply {
 
-                Glide.with(context)
-                        .load(meiZhiDTO.url)
-                        .into(this)
-            }
+                Glide.with(context).load(meiZhiDTO.url).into(ivCover)
 
-            // 名称
-            itemView.tvTitle.apply {
-
-                text = meiZhiDTO.who
+                tvTitle.text = meiZhiDTO.desc
             }
         }
-    }
-
-    class LoadMore(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
     }
 }

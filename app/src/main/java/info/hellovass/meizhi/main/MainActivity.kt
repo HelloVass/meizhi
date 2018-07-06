@@ -1,82 +1,94 @@
 package info.hellovass.meizhi.main
 
-import android.arch.lifecycle.Observer
-import android.os.Bundle
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.LinearLayoutManager
-import info.hellovass.meizhi.R
-import info.hellovass.meizhi.dto.MeiZhiDTO
-import info.hellovass.meizhi.ext.createVM
+import info.hellovass.library.mvp.p.ActivityPresenter
 import info.hellovass.meizhi.lib.network.Resource
+import info.hellovass.meizhi.lib.network.Result
+import info.hellovass.meizhi.lib.network.RxSchedulerHelper
 import info.hellovass.meizhi.lib.network.Status
-import info.hellovass.planner.base.BaseActivity
+import io.reactivex.Observable
+import io.reactivex.ObservableTransformer
 import kotlinx.android.synthetic.main.activity_main.*
+import ru.alexbykov.nopaginate.paginate.NoPaginate
 
-class MainActivity : BaseActivity() {
+class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
 
-    private lateinit var mainVM: MainVM
+    private var pageNum = 1
 
-    private lateinit var meiZhisAdapter: MeiZhisAdapter
+    private lateinit var noPaginate: NoPaginate
 
-    override fun getLayoutResId(): Int {
+    override fun createRepo(): MainRepo? {
 
-        return R.layout.activity_main
+        return MainRepo()
     }
 
-    override fun obtainVM() {
+    override fun createViewDelegate(): MainDelegate {
 
-        mainVM = createVM(MainVM::class.java)
+        return MainDelegate()
     }
 
-    override fun initData(savedInstanceState: Bundle?) {
+    override fun initWidgets() {
 
-        refreshLayout.apply {
-
-            setOnRefreshListener(mainVM.provideOnRefreshListener())
-        }
-
-
-        rcvList.apply {
-
-            layoutManager = LinearLayoutManager(this@MainActivity)
-
-            addOnScrollListener(mainVM.provideOnScrollListener())
-
-            meiZhisAdapter = MeiZhisAdapter(mainVM.meiZhisDataSet)
-            adapter = meiZhisAdapter
-        }
-
-        mainVM.loadData(1)
+        mViewDelegate?.setupRcvList(this@MainActivity)
     }
 
-    override fun observeData() {
+    override fun bindEvent() {
 
-        mainVM.meiZhisObservable.observe(this, Observer<Resource<List<MeiZhiDTO>>> {
+        noPaginate = NoPaginate.with(rcvList)
+                .setLoadingTriggerThreshold(0)
+                .setOnLoadMoreListener {
 
-            it?.let {
-
-                handleResult(it)
-            }
-        })
-    }
-
-    private fun handleResult(resource: Resource<List<MeiZhiDTO>>) {
-
-        when (resource.status) {
-
-            Status.SUCCESS -> {
-
-                resource.data?.let {
-
-                    val result = DiffUtil.calculateDiff(DiffCallBack(meiZhisAdapter.datas, it))
-                    result.dispatchUpdatesTo(meiZhisAdapter)
+                    loadData(false)
                 }
-            }
-            Status.ERROR -> {
+                .build()
+    }
 
-            }
-            Status.LOADING -> {
+    private fun loadData(pullToRefresh: Boolean) {
 
+        if (pullToRefresh) {
+            pageNum = 1
+        }
+
+        mRepo?.let {
+
+            it.getMeiZhis(count = 10, page = pageNum)
+                    .compose(translate())
+                    .startWith(Resource.loading())
+                    .compose(RxSchedulerHelper.io2main())
+                    .subscribe({
+                        when (it?.status) {
+                            Status.SUCCESS -> {
+
+                                mViewDelegate?.insertItems(it.data!!)
+                                noPaginate.showLoading(false)
+                                pageNum++
+                            }
+                            Status.ERROR -> {
+
+                                mViewDelegate?.failed()
+                                noPaginate.showLoading(false)
+                                noPaginate.showError(true)
+                            }
+                            Status.LOADING -> {
+
+                                mViewDelegate?.loading()
+                                noPaginate.showLoading(true)
+                            }
+                        }
+                    })
+        }
+    }
+
+    private fun <T> translate(): ObservableTransformer<Result<T>, Resource<T>> {
+
+        return ObservableTransformer { upstream ->
+
+            upstream.flatMap { (error, results) ->
+
+                if (!error) {
+                    Observable.just(Resource.success(results))
+                } else {
+                    Observable.error(Throwable("error..."))
+                }
             }
         }
     }
