@@ -35,6 +35,7 @@ abstract class ActivityPresenter<T : IDelegate, M : IRepo> : AppCompatActivity()
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
 
+        mRepo ?: createRepo()
         mViewDelegate ?: createViewDelegate()
     }
 

@@ -1,20 +1,15 @@
 package info.hellovass.meizhi.main
 
+import android.os.Bundle
 import info.hellovass.library.mvp.p.ActivityPresenter
 import info.hellovass.meizhi.lib.network.Resource
-import info.hellovass.meizhi.lib.network.Result
+import info.hellovass.meizhi.lib.network.RxResultHandler
 import info.hellovass.meizhi.lib.network.RxSchedulerHelper
 import info.hellovass.meizhi.lib.network.Status
-import io.reactivex.Observable
-import io.reactivex.ObservableTransformer
-import kotlinx.android.synthetic.main.activity_main.*
-import ru.alexbykov.nopaginate.paginate.NoPaginate
 
 class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
 
     private var pageNum = 1
-
-    private lateinit var noPaginate: NoPaginate
 
     override fun createRepo(): MainRepo? {
 
@@ -28,18 +23,27 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
 
     override fun initWidgets() {
 
-        mViewDelegate?.setupRcvList(this@MainActivity)
+        // 下拉刷新控件初始化
+        mViewDelegate?.setupRefreshLayout(this)
+
+        // 列表控件初始化
+        mViewDelegate?.setupRcvList(this)
     }
 
     override fun bindEvent() {
 
-        noPaginate = NoPaginate.with(rcvList)
-                .setLoadingTriggerThreshold(0)
-                .setOnLoadMoreListener {
+        mViewDelegate?.refreshLayout?.setOnRefreshListener {
+            loadData(true)
+        }
 
-                    loadData(false)
-                }
-                .build()
+        mViewDelegate?.setupLoadMore {
+            loadData(false)
+        }
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        loadData(true)
     }
 
     private fun loadData(pullToRefresh: Boolean) {
@@ -51,45 +55,40 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
         mRepo?.let {
 
             it.getMeiZhis(count = 10, page = pageNum)
-                    .compose(translate())
+                    .compose(RxResultHandler.handleResult())
                     .startWith(Resource.loading())
                     .compose(RxSchedulerHelper.io2main())
                     .subscribe({
+
                         when (it?.status) {
                             Status.SUCCESS -> {
-
-                                mViewDelegate?.insertItems(it.data!!)
-                                noPaginate.showLoading(false)
+                                if (pullToRefresh) {
+                                    mViewDelegate?.refreshData(it.data!!)
+                                    mViewDelegate?.hideRefreshing()
+                                } else {
+                                    mViewDelegate?.insertAll(it.data!!)
+                                    mViewDelegate?.hidePaginateLoading()
+                                }
                                 pageNum++
                             }
-                            Status.ERROR -> {
-
-                                mViewDelegate?.failed()
-                                noPaginate.showLoading(false)
-                                noPaginate.showError(true)
-                            }
                             Status.LOADING -> {
-
-                                mViewDelegate?.loading()
-                                noPaginate.showLoading(true)
+                                if (pullToRefresh) {
+                                    mViewDelegate?.showRefreshing()
+                                } else {
+                                    mViewDelegate?.showPaginateLoading()
+                                }
+                            }
+                            Status.ERROR -> {
+                                if (pullToRefresh) {
+                                    mViewDelegate?.hideRefreshing()
+                                } else {
+                                    mViewDelegate?.hidePaginateLoading()
+                                }
                             }
                         }
+                    }, {
+                        mViewDelegate?.toast(this, it.message)
                     })
-        }
-    }
-
-    private fun <T> translate(): ObservableTransformer<Result<T>, Resource<T>> {
-
-        return ObservableTransformer { upstream ->
-
-            upstream.flatMap { (error, results) ->
-
-                if (!error) {
-                    Observable.just(Resource.success(results))
-                } else {
-                    Observable.error(Throwable("error..."))
-                }
-            }
         }
     }
 }

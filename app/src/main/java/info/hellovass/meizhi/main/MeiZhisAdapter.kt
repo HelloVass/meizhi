@@ -1,6 +1,7 @@
 package info.hellovass.meizhi.main
 
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
@@ -28,6 +29,13 @@ class MeiZhisAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         (holder as MeiZhiVH).bind(meizhis[position], position)
     }
 
+    fun refresh(data: List<MeiZhiDTO>) {
+
+        meizhis.clear()
+        meizhis.addAll(data)
+        notifyDataSetChanged()
+    }
+
     fun insert(data: List<MeiZhiDTO>) {
 
         val startIndex: Int = meizhis.size
@@ -42,7 +50,9 @@ class MeiZhisAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             itemView.apply {
 
-                Glide.with(context).load(meiZhiDTO.url).into(ivCover)
+                Glide.with(context)
+                        .load(meiZhiDTO.url)
+                        .into(ivCover)
 
                 tvTitle.text = meiZhiDTO.desc
             }

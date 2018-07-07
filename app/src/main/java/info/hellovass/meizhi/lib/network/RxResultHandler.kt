@@ -7,16 +7,17 @@ import io.reactivex.SingleTransformer
 
 object RxResultHandler {
 
-    fun <T> handleResult(): ObservableTransformer<Result<T>, T> {
+    fun <T> handleResult(): ObservableTransformer<Result<T>, Resource<T>> {
 
         return ObservableTransformer { upstream ->
 
             upstream.flatMap { (error, results) ->
 
-                if (!error)
-                    Observable.just(results)
-                else
-                    Observable.error(Throwable("服务器发生错误"))
+                if (!error) {
+                    Observable.just(Resource.success(results))
+                } else {
+                    Observable.error(Throwable("loadMoreError..."))
+                }
             }
         }
     }

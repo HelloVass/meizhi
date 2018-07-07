@@ -52,5 +52,5 @@ dependencies {
     implementation project(':library')
 
     // nopaginate
-    implementation 'ru.alexbykov:nopaginate:0.9.9'
+    implementation 'com.github.markomilos:paginate:0.5.1'
 }

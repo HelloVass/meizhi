@@ -35,8 +35,8 @@ class ApiClient private constructor() {
 
         return OkHttpClient.Builder()
                 .addInterceptor(provideLogInterceptor())
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(10, TimeUnit.SECONDS)
+                .connectTimeout(1, TimeUnit.SECONDS)
+                .readTimeout(1, TimeUnit.SECONDS)
                 .build()
     }
 

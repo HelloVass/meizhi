@@ -14,11 +14,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <ImageView
+        <info.hellovass.meizhi.widgets.RatioImageView
             android:id="@+id/ivCover"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
+            android:minHeight="160dp"
+            android:scaleType="fitCenter"
             tools:src="@mipmap/ic_launcher" />
 
         <LinearLayout
