@@ -1,12 +1,17 @@
 package info.hellovass.meizhi.main
 
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityOptionsCompat
+import android.view.View
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
 import info.hellovass.dto.MeiZhiDTO
+import info.hellovass.meizhi.preview.PreviewActivity
 import info.hellovass.network.Resource
 import info.hellovass.network.RxResultHandler
 import info.hellovass.network.RxSchedulerHelper
 import info.hellovass.network.Status
+import org.jetbrains.anko.intentFor
 
 class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
 
@@ -28,7 +33,19 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
         viewDelegate?.setupRefreshLayout()
 
         // 列表控件初始化
-        viewDelegate?.setupRcvList()
+        viewDelegate?.setupRcvList(object : MeiZhisAdapter.OnMeiZhiTouchListener() {
+
+            override fun onTouch(view: View, imageView: View, meiZhiDTO: MeiZhiDTO) {
+
+                val intent = intentFor<PreviewActivity>("url" to meiZhiDTO.url)
+
+                val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this@MainActivity,
+                        imageView, "picture")
+
+                ActivityCompat.startActivity(this@MainActivity, intent, optionsCompat.toBundle())
+
+            }
+        })
 
         // 加载更多控件初始化
         viewDelegate?.setupLoadMore {

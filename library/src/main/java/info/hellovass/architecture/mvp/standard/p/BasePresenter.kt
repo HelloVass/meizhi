@@ -1,6 +1,6 @@
-package info.hellovass.kmvp.p
+package info.hellovass.architecture.mvp.standard.p
 
-import info.hellovass.kmvp.m.IRepo
-import info.hellovass.kmvp.v.IView
+import info.hellovass.architecture.mvp.standard.m.IRepo
+import info.hellovass.architecture.mvp.standard.v.IView
 
 abstract class BasePresenter<V : IView, M : IRepo>(protected var view: V, private val repo: M) : IPresenter

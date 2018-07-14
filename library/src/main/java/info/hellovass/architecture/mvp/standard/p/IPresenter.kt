@@ -1,4 +1,4 @@
-package info.hellovass.kmvp.p
+package info.hellovass.architecture.mvp.standard.p
 
 interface IPresenter {
 

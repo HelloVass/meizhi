@@ -14,7 +14,7 @@ import org.jetbrains.anko.toast
 
 class MainDelegate(activity: AppCompatActivity) : ActivityDelegate(activity), ILoadMore {
 
-    private val viewAdapter by lazy { MeiZhisAdapter(activity) }
+    private lateinit var viewAdapter: MeiZhisAdapter
 
     private lateinit var rcvList: RecyclerView
 
@@ -33,10 +33,13 @@ class MainDelegate(activity: AppCompatActivity) : ActivityDelegate(activity), IL
                 R.color.refresh_progress_3)
     }
 
-    fun setupRcvList() {
+    fun setupRcvList(onMeiZhiTouchListener: MeiZhisAdapter.OnMeiZhiTouchListener) {
         rcvList = find(R.id.rcvList)
-        rcvList.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        rcvList.layoutManager = StaggeredGridLayoutManager(2,
+                StaggeredGridLayoutManager.VERTICAL)
+        viewAdapter = MeiZhisAdapter(activity)
         rcvList.adapter = viewAdapter
+        viewAdapter.onMeiZhiTouchListener = onMeiZhiTouchListener
     }
 
     fun setupLoadMore(onLoadMoreListener: () -> Unit) {
@@ -82,9 +85,5 @@ class MainDelegate(activity: AppCompatActivity) : ActivityDelegate(activity), IL
 
     override fun resetLoadMore() {
         loadMore.resetLoadMore()
-    }
-
-    fun toast(message: String?) {
-        activity.toast(message ?: "")
     }
 }

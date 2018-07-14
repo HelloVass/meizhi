@@ -1,8 +1,8 @@
-package info.hellovass.kmvp.v
+package info.hellovass.architecture.mvp.standard.v
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import info.hellovass.kmvp.p.IPresenter
+import info.hellovass.architecture.mvp.standard.p.IPresenter
 
 abstract class BaseActivity<P : IPresenter> : AppCompatActivity() {
 

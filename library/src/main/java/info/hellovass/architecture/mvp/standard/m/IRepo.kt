@@ -1,4 +1,4 @@
-package info.hellovass.kmvp.m
+package info.hellovass.architecture.mvp.standard.m
 
 interface IRepo {
 

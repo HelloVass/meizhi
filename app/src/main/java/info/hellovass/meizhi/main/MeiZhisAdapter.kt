@@ -13,9 +13,12 @@ class MeiZhisAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.V
 
     private val meizhis: MutableList<MeiZhiDTO> = mutableListOf()
 
+    var onMeiZhiTouchListener: OnMeiZhiTouchListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        return MeiZhiVH(inflate(R.layout.listitem_meizhis, parent, false))
+        val itemView: View = inflate(R.layout.listitem_meizhis, parent, false)
+        return MeiZhiVH(itemView, onMeiZhiTouchListener)
     }
 
     override fun getItemCount(): Int {
@@ -43,7 +46,7 @@ class MeiZhisAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.V
         notifyItemRangeInserted(startIndex, itemCount)
     }
 
-    class MeiZhiVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MeiZhiVH(itemView: View, private val onMeiZhiTouchListener: OnMeiZhiTouchListener?) : RecyclerView.ViewHolder(itemView) {
 
         fun onBindViewHolder(meiZhiDTO: MeiZhiDTO, position: Int) {
 
@@ -55,6 +58,16 @@ class MeiZhisAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.V
 
                 tvTitle.text = meiZhiDTO.desc
             }
+
+            itemView.setOnClickListener { itemView ->
+
+                onMeiZhiTouchListener?.onTouch(itemView, itemView.ivCover, meiZhiDTO)
+            }
         }
+    }
+
+    abstract class OnMeiZhiTouchListener {
+
+        abstract fun onTouch(view: View, imageView: View, meiZhiDTO: MeiZhiDTO)
     }
 }
