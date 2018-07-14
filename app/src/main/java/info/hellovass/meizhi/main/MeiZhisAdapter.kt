@@ -1,16 +1,15 @@
 package info.hellovass.meizhi.main
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import info.hellovass.dto.MeiZhiDTO
 import info.hellovass.meizhi.R
-import info.hellovass.meizhi.dto.MeiZhiDTO
-import info.hellovass.meizhi.ext.inflate
 import kotlinx.android.synthetic.main.listitem_meizhis.view.*
 
-class MeiZhisAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MeiZhisAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val meizhis: MutableList<MeiZhiDTO> = mutableListOf()
 
@@ -26,17 +25,17 @@ class MeiZhisAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        (holder as MeiZhiVH).bind(meizhis[position], position)
+        (holder as MeiZhiVH).onBindViewHolder(meizhis[position], position)
     }
 
-    fun refresh(data: List<MeiZhiDTO>) {
+    fun setItems(data: List<MeiZhiDTO>) {
 
         meizhis.clear()
         meizhis.addAll(data)
         notifyDataSetChanged()
     }
 
-    fun insert(data: List<MeiZhiDTO>) {
+    fun addItems(data: List<MeiZhiDTO>) {
 
         val startIndex: Int = meizhis.size
         val itemCount: Int = data.count()
@@ -46,7 +45,7 @@ class MeiZhisAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class MeiZhiVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(meiZhiDTO: MeiZhiDTO, position: Int) {
+        fun onBindViewHolder(meiZhiDTO: MeiZhiDTO, position: Int) {
 
             itemView.apply {
 

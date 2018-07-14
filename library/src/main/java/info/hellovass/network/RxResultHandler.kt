@@ -1,9 +1,7 @@
-package info.hellovass.meizhi.lib.network
+package info.hellovass.network
 
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
-import io.reactivex.Single
-import io.reactivex.SingleTransformer
 
 object RxResultHandler {
 

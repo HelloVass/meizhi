@@ -2,92 +2,89 @@ package info.hellovass.meizhi.main
 
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import com.paginate.Paginate
-import info.hellovass.library.mvp.v.IDelegate
+import android.support.v7.widget.StaggeredGridLayoutManager
+import info.hellovass.architecture.mvp.special.v.ActivityDelegate
+import info.hellovass.dto.MeiZhiDTO
+import info.hellovass.widgets.loadmore.ILoadMore
+import info.hellovass.widgets.loadmore.LoadMore
 import info.hellovass.meizhi.R
-import info.hellovass.meizhi.dto.MeiZhiDTO
 import org.jetbrains.anko.toast
 
 
-class MainDelegate : IDelegate {
+class MainDelegate(activity: AppCompatActivity) : ActivityDelegate(activity), ILoadMore {
 
-    private val viewAdapter by lazy { MeiZhisAdapter() }
+    private val viewAdapter by lazy { MeiZhisAdapter(activity) }
 
-    lateinit var rcvList: RecyclerView
+    private lateinit var rcvList: RecyclerView
 
-    lateinit var refreshLayout: SwipeRefreshLayout
+    private lateinit var refreshLayout: SwipeRefreshLayout
 
-    lateinit var paginate: Paginate
-
-    private var isLoading: Boolean = false
+    private lateinit var loadMore: ILoadMore
 
     override fun getLayoutResId(): Int {
 
         return R.layout.activity_main
     }
 
-    fun setupRefreshLayout(activity: AppCompatActivity) {
-
-        refreshLayout = activity.findViewById(R.id.refreshLayout)
-        refreshLayout.setColorSchemeResources(R.color.refresh_progress_1,
-                R.color.refresh_progress_2, R.color.refresh_progress_3)
+    fun setupRefreshLayout() {
+        refreshLayout = find(R.id.refreshLayout)
+        refreshLayout.setColorSchemeResources(R.color.refresh_progress_1, R.color.refresh_progress_2,
+                R.color.refresh_progress_3)
     }
 
-    fun setupRcvList(activity: AppCompatActivity) {
-
-        rcvList = activity.findViewById(R.id.rcvList)
-        rcvList.layoutManager = GridLayoutManager(activity, 2)
+    fun setupRcvList() {
+        rcvList = find(R.id.rcvList)
+        rcvList.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         rcvList.adapter = viewAdapter
     }
 
     fun setupLoadMore(onLoadMoreListener: () -> Unit) {
 
-        paginate = Paginate.with(rcvList, object : Paginate.Callbacks {
+        loadMore = LoadMore.Builder(activity)
+                .setRecyclerView(rcvList)
+                .setLoadMoreListener {
 
-            override fun onLoadMore() = onLoadMoreListener.invoke()
-
-            override fun isLoading(): Boolean = this@MainDelegate.isLoading
-
-            override fun hasLoadedAllItems(): Boolean = false
-
-        }).setLoadingTriggerThreshold(0).build()
-        paginate.setHasMoreDataToLoad(false)
+                    if (!refreshLayout.isRefreshing) {
+                        onLoadMoreListener()
+                    }
+                }
+                .build()
     }
 
-    fun refreshData(data: List<MeiZhiDTO>) {
-
-        viewAdapter.refresh(data)
+    fun bindOnRefreshListener(onRefreshListener: () -> Unit) {
+        refreshLayout.setOnRefreshListener(onRefreshListener)
     }
 
-    fun insertAll(data: List<MeiZhiDTO>) {
-
-        viewAdapter.insert(data)
+    fun setItems(data: List<MeiZhiDTO>) {
+        viewAdapter.setItems(data)
     }
 
-    fun showRefreshing() {
-
-        refreshLayout.isRefreshing = true
+    fun addItems(data: List<MeiZhiDTO>) {
+        viewAdapter.addItems(data)
     }
 
-    fun hideRefreshing() {
-
-        refreshLayout.isRefreshing = false
+    fun showRefreshing(isRefreshing: Boolean) {
+        refreshLayout.isRefreshing = isRefreshing
     }
 
-    fun showPaginateLoading() {
-
-        isLoading = true
+    override fun onLoadMoreBegin() {
+        loadMore.onLoadMoreBegin()
     }
 
-    fun hidePaginateLoading() {
-
-        isLoading = false
+    override fun onLoadMoreSucceed(hasMoreItems: Boolean) {
+        loadMore.onLoadMoreSucceed(hasMoreItems)
     }
 
-    fun toast(activity: AppCompatActivity, error: String?) {
+    override fun onLoadMoreFailed() {
+        loadMore.onLoadMoreFailed()
+    }
 
-        activity.toast(error ?: "未知错误")
+    override fun resetLoadMore() {
+        loadMore.resetLoadMore()
+    }
+
+    fun toast(message: String?) {
+        activity.toast(message ?: "")
     }
 }

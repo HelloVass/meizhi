@@ -1,7 +1,6 @@
-package info.hellovass.meizhi.lib.network
+package info.hellovass.network
 
 import io.reactivex.ObservableTransformer
-import io.reactivex.SingleTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 

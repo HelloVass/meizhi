@@ -1,4 +1,4 @@
-package info.hellovass.meizhi.lib.network
+package info.hellovass.network
 
 class Constant {
 

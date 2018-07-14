@@ -1,4 +1,4 @@
-package info.hellovass.meizhi.dto
+package info.hellovass.dto
 
 
 data class MeiZhiDTO(

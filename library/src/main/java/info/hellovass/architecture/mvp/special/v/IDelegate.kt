@@ -1,4 +1,4 @@
-package info.hellovass.library.mvp.v
+package info.hellovass.architecture.mvp.special.v
 
 interface IDelegate {
 

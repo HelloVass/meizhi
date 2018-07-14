@@ -1,11 +1,12 @@
 package info.hellovass.meizhi.main
 
 import android.os.Bundle
-import info.hellovass.library.mvp.p.ActivityPresenter
-import info.hellovass.meizhi.lib.network.Resource
-import info.hellovass.meizhi.lib.network.RxResultHandler
-import info.hellovass.meizhi.lib.network.RxSchedulerHelper
-import info.hellovass.meizhi.lib.network.Status
+import info.hellovass.architecture.mvp.special.p.ActivityPresenter
+import info.hellovass.dto.MeiZhiDTO
+import info.hellovass.network.Resource
+import info.hellovass.network.RxResultHandler
+import info.hellovass.network.RxSchedulerHelper
+import info.hellovass.network.Status
 
 class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
 
@@ -18,31 +19,35 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
 
     override fun createViewDelegate(): MainDelegate {
 
-        return MainDelegate()
+        return MainDelegate(this)
     }
 
     override fun initWidgets() {
 
         // 下拉刷新控件初始化
-        mViewDelegate?.setupRefreshLayout(this)
+        viewDelegate?.setupRefreshLayout()
 
         // 列表控件初始化
-        mViewDelegate?.setupRcvList(this)
+        viewDelegate?.setupRcvList()
+
+        // 加载更多控件初始化
+        viewDelegate?.setupLoadMore {
+
+            loadData(false)
+        }
     }
 
     override fun bindEvent() {
 
-        mViewDelegate?.refreshLayout?.setOnRefreshListener {
-            loadData(true)
-        }
+        viewDelegate?.bindOnRefreshListener {
 
-        mViewDelegate?.setupLoadMore {
-            loadData(false)
+            loadData(true)
         }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
+
         loadData(true)
     }
 
@@ -52,43 +57,46 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
             pageNum = 1
         }
 
-        mRepo?.let {
+        repo?.let {
 
             it.getMeiZhis(count = 10, page = pageNum)
                     .compose(RxResultHandler.handleResult())
-                    .startWith(Resource.loading())
+                    .onErrorReturn { Resource.error(it.message) }
                     .compose(RxSchedulerHelper.io2main())
-                    .subscribe({
+                    .startWith(Resource.loading())
+                    .subscribe { handleResource(pullToRefresh, it) }
+        }
+    }
 
-                        when (it?.status) {
-                            Status.SUCCESS -> {
-                                if (pullToRefresh) {
-                                    mViewDelegate?.refreshData(it.data!!)
-                                    mViewDelegate?.hideRefreshing()
-                                } else {
-                                    mViewDelegate?.insertAll(it.data!!)
-                                    mViewDelegate?.hidePaginateLoading()
-                                }
-                                pageNum++
-                            }
-                            Status.LOADING -> {
-                                if (pullToRefresh) {
-                                    mViewDelegate?.showRefreshing()
-                                } else {
-                                    mViewDelegate?.showPaginateLoading()
-                                }
-                            }
-                            Status.ERROR -> {
-                                if (pullToRefresh) {
-                                    mViewDelegate?.hideRefreshing()
-                                } else {
-                                    mViewDelegate?.hidePaginateLoading()
-                                }
-                            }
-                        }
-                    }, {
-                        mViewDelegate?.toast(this, it.message)
-                    })
+    private fun handleResource(pullToRefresh: Boolean, resource: Resource<List<MeiZhiDTO>>?) {
+
+        when (resource?.status) {
+
+            Status.LOADING -> {
+                if (pullToRefresh) {
+                    viewDelegate?.showRefreshing(true)
+                } else {
+                    viewDelegate?.onLoadMoreBegin()
+                }
+            }
+            Status.SUCCESS -> {
+                if (pullToRefresh) {
+                    viewDelegate?.setItems(resource.data!!)
+                    viewDelegate?.showRefreshing(false)
+                    viewDelegate?.resetLoadMore()
+                } else {
+                    viewDelegate?.addItems(resource.data!!)
+                    viewDelegate?.onLoadMoreSucceed(true)
+                }
+                pageNum++
+            }
+            Status.ERROR -> {
+                if (pullToRefresh) {
+                    viewDelegate?.showRefreshing(false)
+                } else {
+                    viewDelegate?.onLoadMoreFailed()
+                }
+            }
         }
     }
 }

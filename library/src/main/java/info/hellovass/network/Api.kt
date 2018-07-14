@@ -1,8 +1,7 @@
-package info.hellovass.meizhi.lib.network
+package info.hellovass.network
 
-import info.hellovass.meizhi.dto.MeiZhiDTO
+import info.hellovass.dto.MeiZhiDTO
 import io.reactivex.Observable
-import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 
