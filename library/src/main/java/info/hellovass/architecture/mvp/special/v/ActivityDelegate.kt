@@ -21,21 +21,22 @@ abstract class ActivityDelegate(val activity: AppCompatActivity) : IDelegate {
         return activity.findViewById(id) as V
     }
 
-    override fun setupNavigation(title: String?, onBackPressedListener: View.OnClickListener?) {
+    override fun setTitle(title: String?) {
 
         toolbar = find(R.id.toolbar)
+        toolbar.title = title
+    }
 
-        toolbar.let {
-            it.title = title
-            it.setNavigationIcon(R.drawable.ic_navi_back)
-            it.setNavigationOnClickListener(onBackPressedListener)
-        }
+    override fun setupNavigation(naviIcon: Int, onBackPressedListener: View.OnClickListener?) {
+
+        toolbar = find(R.id.toolbar)
+        toolbar.setNavigationIcon(naviIcon)
+        toolbar.setNavigationOnClickListener(onBackPressedListener)
     }
 
     override fun setupMenu(id: Int, listener: Toolbar.OnMenuItemClickListener) {
 
         toolbar = find(R.id.toolbar)
-
         toolbar.inflateMenu(id)
         toolbar.setOnMenuItemClickListener(listener)
     }
@@ -43,7 +44,6 @@ abstract class ActivityDelegate(val activity: AppCompatActivity) : IDelegate {
     override fun hideOrShowToolbar() {
 
         toolbar = find(R.id.toolbar)
-
         toolbar.animate()
                 .translationY(if (toolbar.isHidden) 0.0F else -toolbar.height.toFloat())
                 .setInterpolator(DecelerateInterpolator(2.0F))

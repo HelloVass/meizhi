@@ -7,7 +7,9 @@ interface IDelegate {
 
     fun getLayoutResId(): Int
 
-    fun setupNavigation(title: String?, onBackPressedListener: View.OnClickListener?)
+    fun setTitle(title: String?)
+
+    fun setupNavigation(naviIcon: Int, onBackPressedListener: View.OnClickListener?)
 
     fun setupMenu(id: Int, listener: Toolbar.OnMenuItemClickListener)
 

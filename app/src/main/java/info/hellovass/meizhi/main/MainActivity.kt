@@ -56,6 +56,8 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
 
     override fun bindEvent() {
 
+        viewDelegate?.setTitle("MeiZhi")
+
         viewDelegate?.bindOnRefreshListener {
 
             loadData(true)
