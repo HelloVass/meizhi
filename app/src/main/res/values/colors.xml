@@ -6,4 +6,19 @@
     <color name="refresh_progress_1">#e91e63</color>
     <color name="refresh_progress_2">#00b0ff</color>
     <color name="refresh_progress_3">#3F51B5</color>
+
+    <color name="mcgpalette0_50">#fbeded</color>
+    <color name="mcgpalette0_100">#f6d1d1</color>
+    <color name="mcgpalette0_200">#f0b3b3</color>
+    <color name="mcgpalette0_300">#e99494</color>
+    <color name="mcgpalette0_400">#e57d7d</color>
+    <color name="mcgpalette0_500">#e06666</color>
+    <color name="mcgpalette0_600">#dc5e5e</color>
+    <color name="mcgpalette0_700">#d85353</color>
+    <color name="mcgpalette0_800">#d34949</color>
+    <color name="mcgpalette0_900">#cb3838</color>
+    <color name="mcgpalette0_A100">#ffffff</color>
+    <color name="mcgpalette0_A200">#ffe2e2</color>
+    <color name="mcgpalette0_A400">#ffafaf</color>
+    <color name="mcgpalette0_A700">#ff9696</color>
 </resources>

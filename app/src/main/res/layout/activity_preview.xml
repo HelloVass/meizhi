@@ -5,6 +5,9 @@
     android:background="#000000"
     android:orientation="vertical">
 
+    <include
+        layout="@layout/include_toolbar"/>
+
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/ivPreview"
         android:layout_width="match_parent"

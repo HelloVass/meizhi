@@ -17,11 +17,10 @@ abstract class ActivityPresenter<V : IDelegate, M : IRepo> : AppCompatActivity()
         viewDelegate = createViewDelegate()
         repo = createRepo()
 
-        // 安全取出 layoutResId
         val layoutResId = viewDelegate?.getLayoutResId() ?: -1
 
         if (layoutResId < 0) {
-            throw IllegalArgumentException("layoutResId can't be -1")
+            throw IllegalStateException("layoutResId can't be -1")
         }
         setContentView(layoutResId)
 

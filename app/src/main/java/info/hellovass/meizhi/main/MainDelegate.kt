@@ -6,10 +6,9 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import info.hellovass.architecture.mvp.special.v.ActivityDelegate
 import info.hellovass.dto.MeiZhiDTO
+import info.hellovass.meizhi.R
 import info.hellovass.widgets.loadmore.ILoadMore
 import info.hellovass.widgets.loadmore.LoadMore
-import info.hellovass.meizhi.R
-import org.jetbrains.anko.toast
 
 
 class MainDelegate(activity: AppCompatActivity) : ActivityDelegate(activity), ILoadMore {
