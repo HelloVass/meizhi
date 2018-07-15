@@ -37,7 +37,7 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
 
             override fun onTouch(view: View, imageView: View, meiZhiDTO: MeiZhiDTO) {
 
-                val intent = intentFor<PreviewActivity>("url" to meiZhiDTO.url)
+                val intent = intentFor<PreviewActivity>("url" to meiZhiDTO.url, "desc" to meiZhiDTO.desc)
 
                 val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this@MainActivity,
                         imageView, "picture")

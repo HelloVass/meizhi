@@ -17,11 +17,9 @@ abstract class ActivityPresenter<V : IDelegate, M : IRepo> : AppCompatActivity()
         viewDelegate = createViewDelegate()
         repo = createRepo()
 
-        val layoutResId = viewDelegate?.getLayoutResId() ?: -1
+        val layoutResId = viewDelegate?.getLayoutResId()
+                ?: throw IllegalStateException("layoutResId can't be -1")
 
-        if (layoutResId < 0) {
-            throw IllegalStateException("layoutResId can't be -1")
-        }
         setContentView(layoutResId)
 
         initWidgets()

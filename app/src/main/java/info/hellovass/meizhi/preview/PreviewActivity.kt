@@ -5,8 +5,9 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import com.github.chrisbanes.photoview.OnViewTapListener
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
+import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.meizhi.R
-import org.jetbrains.anko.toast
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
 
@@ -25,12 +26,12 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
         viewDelegate?.setupMenu(R.menu.menu_preview, Toolbar.OnMenuItemClickListener { item ->
 
             when (item.itemId) {
-                R.id.action_share -> {
-                    toast("TODO")
+                R.id.action_save -> {
+                    saveImageToDisk(intent.extras)
                     true
                 }
-                R.id.action_save -> {
-                    toast("TODO")
+                R.id.action_share -> {
+                    viewDelegate?.showSnackbar("开发中")
                     true
                 }
                 else -> {
@@ -49,4 +50,14 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
 
         viewDelegate?.loadImage(intent.extras)
     }
+
+    private fun saveImageToDisk(extras: Bundle?) {
+
+        repo?.saveImageToDisk(this, extras)
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe { viewDelegate?.showSnackbar("图片保存至${repo?.saveDir}目录下") }
+    }
 }
+
+
+
