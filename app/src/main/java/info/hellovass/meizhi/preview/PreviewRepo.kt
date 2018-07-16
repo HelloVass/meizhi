@@ -22,11 +22,10 @@ class PreviewRepo : IRepo {
 
     val saveDir: String = File(Environment.getExternalStorageDirectory(), "MeiZhi").absolutePath
 
-    fun saveImageToDisk(activity: Activity, imageUrl: String, fileName: String): Maybe<Uri>? {
+    fun saveImageToDisk(activity: Activity, imageUrl: String, fileName: String): Maybe<Uri> {
 
         return maybe1(activity, imageUrl)
                 .flatMap { maybe2(fileName, it) }
-                .subscribeOn(Schedulers.io())
     }
 
     private fun maybe1(activity: Activity, imageUrl: String): Maybe<Bitmap> {

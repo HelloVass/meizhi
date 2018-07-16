@@ -8,7 +8,9 @@ import com.github.chrisbanes.photoview.OnViewTapListener
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
 import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.meizhi.R
-import io.reactivex.android.schedulers.AndroidSchedulers
+import info.hellovass.network.Resource
+import info.hellovass.network.RxSchedulerHelper
+import io.reactivex.functions.Consumer
 
 class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
 
@@ -28,7 +30,7 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
 
             when (item.itemId) {
                 R.id.action_save -> {
-                    saveImageToDisk(intent.extras)
+                    saveImageToDisk()
                     true
                 }
                 R.id.action_share -> {
@@ -52,22 +54,23 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
         viewDelegate?.loadImage(intent.extras)
     }
 
-    private fun saveImageToDisk(extras: Bundle?) {
+    @Suppress("UNUSED_LAMBDA_EXPRESSION")
+    private fun saveImageToDisk() {
 
-        val url = extras?.getString("url") ?: ""
-        val fileName = "${extras?.getString("desc")}.jpg"
+        repo?.let {
 
-        repo?.saveImageToDisk(this, url, fileName)
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe { it -> handleResult(it) }
-    }
-
-    private fun handleResult(uri: Uri) {
-
-        viewDelegate?.showSnackbar("图片保存至${repo?.saveDir}目录下")
-        viewDelegate?.notifyGallery(uri)
+            it.saveImageToDisk(this, imageUrl, fileName)
+                    .toObservable()
+                    .compose(transform())
+                    .onErrorReturn { Resource.error(it.message) }
+                    .compose(RxSchedulerHelper.io2main())
+                    .startWith { Resource.loading<Uri>() }
+                    .subscribe({ dispatchResult(it) }, { dispatchResult(Resource.error(it.message)) })
+        }
     }
 }
+
+
 
 
 
