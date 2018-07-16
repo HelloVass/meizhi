@@ -1,6 +1,7 @@
 package info.hellovass.meizhi.preview
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -11,6 +12,7 @@ import com.bumptech.glide.request.FutureTarget
 import info.hellovass.architecture.mvp.special.m.IRepo
 import io.reactivex.Maybe
 import io.reactivex.MaybeOnSubscribe
+import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import java.io.File
 import java.io.FileOutputStream
@@ -20,58 +22,54 @@ class PreviewRepo : IRepo {
 
     val saveDir: String = File(Environment.getExternalStorageDirectory(), "MeiZhi").absolutePath
 
-    fun saveImageToDisk(activity: Activity, extras: Bundle?): Maybe<Uri>? {
+    fun saveImageToDisk(activity: Activity, imageUrl: String, fileName: String): Maybe<Uri>? {
 
-        return Maybe.create(MaybeOnSubscribe<Bitmap> { emitter ->
+        return maybe1(activity, imageUrl)
+                .flatMap { maybe2(fileName, it) }
+                .subscribeOn(Schedulers.io())
+    }
+
+    private fun maybe1(activity: Activity, imageUrl: String): Maybe<Bitmap> {
+
+        return Maybe.create { emitter ->
 
             try {
                 val target: FutureTarget<Bitmap> = Glide.with(activity)
                         .asBitmap()
-                        .load(extras?.get("url"))
+                        .load(imageUrl)
                         .submit()
                 val bitmap: Bitmap = target.get()
                 emitter.onSuccess(bitmap)
             } catch (e: Throwable) {
                 emitter.onError(e)
             }
-        }).flatMap { bitmap ->
+        }
+    }
 
-            val saveDir = File(saveDir)
-            val file = File(saveDir, generateFileName(extras))
-            val uri = Uri.fromFile(file)
+    private fun maybe2(fileName: String, bitmap: Bitmap): Maybe<Uri> {
 
-            if (!saveDir.exists()) {
-                saveDir.mkdir()
-            }
+        return Maybe.create<Uri> {
 
             try {
-                saveImage2Disk(file, bitmap)
-            } catch (e: IOException) {
-                e.printStackTrace()
+                val saveDir = File(saveDir)
+                val file = File(saveDir, fileName)
+
+                if (!saveDir.exists()) {
+                    saveDir.mkdir()
+                }
+
+                // 写入到输出流
+                val outputStream = FileOutputStream(file)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                outputStream.flush()
+                outputStream.close()
+
+                // 成功写入
+                it.onSuccess(Uri.fromFile(file))
+            } catch (e: Exception) {
+                it.onError(e)
             }
-
-            notifyGallery(activity, uri)
-
-            Maybe.just(uri)
-        }.subscribeOn(Schedulers.io())
-    }
-
-    private fun saveImage2Disk(file: File, bitmap: Bitmap) {
-        val fileOutputStream = FileOutputStream(file)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
-        fileOutputStream.flush()
-        fileOutputStream.close()
-    }
-
-    private fun notifyGallery(activity: Activity, uri: Uri?) {
-        val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri)
-        activity.sendBroadcast(intent)
-    }
-
-    private fun generateFileName(extras: Bundle?): String? {
-
-        val des = extras?.getString("desc")
-        return "$des.jpg"
+        }
     }
 }
 

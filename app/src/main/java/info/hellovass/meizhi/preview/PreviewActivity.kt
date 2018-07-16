@@ -1,5 +1,6 @@
 package info.hellovass.meizhi.preview
 
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.View
@@ -53,9 +54,18 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
 
     private fun saveImageToDisk(extras: Bundle?) {
 
-        repo?.saveImageToDisk(this, extras)
+        val url = extras?.getString("url") ?: ""
+        val fileName = "${extras?.getString("desc")}.jpg"
+
+        repo?.saveImageToDisk(this, url, fileName)
                 ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe { viewDelegate?.showSnackbar("图片保存至${repo?.saveDir}目录下") }
+                ?.subscribe { it -> handleResult(it) }
+    }
+
+    private fun handleResult(uri: Uri) {
+
+        viewDelegate?.showSnackbar("图片保存至${repo?.saveDir}目录下")
+        viewDelegate?.notifyGallery(uri)
     }
 }
 

@@ -1,5 +1,7 @@
 package info.hellovass.meizhi.preview
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -23,5 +25,10 @@ class PreviewDelegate(activity: AppCompatActivity) : ActivityDelegate(activity) 
 
         find<PhotoView>(R.id.ivPreview)
                 .setOnViewTapListener(onViewTapListener)
+    }
+
+    fun notifyGallery(uri: Uri) {
+
+        activity.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
     }
 }
