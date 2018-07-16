@@ -4,17 +4,19 @@ import android.net.Uri
 import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.network.Resource
 import info.hellovass.network.Status
+import io.reactivex.Maybe
+import io.reactivex.MaybeTransformer
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
 
-fun <T> transform(): ObservableTransformer<T, Resource<T>> {
+fun <T> transform(): MaybeTransformer<T, Resource<T>> {
 
-    return ObservableTransformer { upstream ->
+    return MaybeTransformer { upstream ->
 
         upstream.flatMap {
 
-            Observable.just(Resource.success(it))
+            return@flatMap Maybe.just(Resource.success(it))
         }
     }
 }
@@ -26,7 +28,8 @@ val PreviewActivity.imageUrl: String
 
 val PreviewActivity.fileName: String
     get() {
-        return intent.extras.getString("desc")
+        val name: String = intent.extras.getString("desc")
+        return "$name.jpg"
     }
 
 fun PreviewActivity.dispatchResult(resource: Resource<Uri>) {

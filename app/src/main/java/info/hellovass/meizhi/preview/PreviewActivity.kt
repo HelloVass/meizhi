@@ -8,9 +8,10 @@ import com.github.chrisbanes.photoview.OnViewTapListener
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
 import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.meizhi.R
+import info.hellovass.network.MaybeHelper
+import info.hellovass.network.ObservableHelper
 import info.hellovass.network.Resource
-import info.hellovass.network.RxSchedulerHelper
-import io.reactivex.functions.Consumer
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
 
@@ -54,18 +55,13 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
         viewDelegate?.loadImage(intent.extras)
     }
 
-    @Suppress("UNUSED_LAMBDA_EXPRESSION")
     private fun saveImageToDisk() {
 
         repo?.let {
-
             it.saveImageToDisk(this, imageUrl, fileName)
-                    .toObservable()
                     .compose(transform())
-                    .onErrorReturn { Resource.error(it.message) }
-                    .compose(RxSchedulerHelper.io2main())
-                    .startWith { Resource.loading<Uri>() }
-                    .subscribe({ dispatchResult(it) }, { dispatchResult(Resource.error(it.message)) })
+                    .compose(MaybeHelper.io2main())
+                    .subscribe { dispatchResult(it) }
         }
     }
 }

@@ -10,10 +10,9 @@ import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.dto.MeiZhiDTO
 import info.hellovass.meizhi.R
 import info.hellovass.meizhi.preview.PreviewActivity
-import info.hellovass.network.Action
-import info.hellovass.network.Resource
-import info.hellovass.network.RxResultHandler
-import info.hellovass.network.RxSchedulerHelper
+import info.hellovass.network.*
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.intentFor
 
 class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
@@ -94,13 +93,14 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
             pageNum = 1
         }
 
-        repo?.let {
+        repo?.let {repo->
 
-            it.getMeiZhis(count = 10, page = pageNum)
-                    .compose(RxResultHandler.handleResult())
+            repo.getMeiZhis(count = 10, page = pageNum)
+                    .map { Resource.success(it.results) }
                     .onErrorReturn { Resource.error(it.message) }
-                    .compose(RxSchedulerHelper.io2main())
-                    .startWith(Resource.loading())
+                    .doOnSubscribe { Resource.loading<List<MeiZhiDTO>>() }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { dispatchResult(action, it) }
         }
     }

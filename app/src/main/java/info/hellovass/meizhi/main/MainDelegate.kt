@@ -46,7 +46,6 @@ class MainDelegate(activity: AppCompatActivity) : ActivityDelegate(activity), IL
         loadMore = LoadMore.Builder(activity)
                 .setRecyclerView(rcvList)
                 .setLoadMoreListener {
-
                     if (!refreshLayout.isRefreshing) {
                         onLoadMoreListener()
                     }

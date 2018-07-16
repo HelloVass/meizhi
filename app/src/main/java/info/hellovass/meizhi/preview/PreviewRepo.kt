@@ -25,12 +25,12 @@ class PreviewRepo : IRepo {
     fun saveImageToDisk(activity: Activity, imageUrl: String, fileName: String): Maybe<Uri> {
 
         return maybe1(activity, imageUrl)
-                .flatMap { maybe2(fileName, it) }
+                .flatMap { bitmap -> maybe2(fileName, bitmap) }
     }
 
     private fun maybe1(activity: Activity, imageUrl: String): Maybe<Bitmap> {
 
-        return Maybe.create { emitter ->
+        return Maybe.create<Bitmap> { emitter ->
 
             try {
                 val target: FutureTarget<Bitmap> = Glide.with(activity)

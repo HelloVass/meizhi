@@ -1,10 +1,12 @@
 package info.hellovass.network
 
+import io.reactivex.MaybeTransformer
 import io.reactivex.ObservableTransformer
+import io.reactivex.SingleTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-object RxSchedulerHelper {
+object ObservableHelper {
 
     fun <T> io2main(): ObservableTransformer<T, T> {
 
@@ -14,3 +16,17 @@ object RxSchedulerHelper {
         }
     }
 }
+
+object MaybeHelper {
+
+    fun <T> io2main(): MaybeTransformer<T, T> {
+
+        return MaybeTransformer { upstream ->
+            upstream.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+        }
+    }
+}
+
+
+

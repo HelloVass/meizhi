@@ -6,6 +6,7 @@ import info.hellovass.network.Api
 import info.hellovass.network.ApiClient
 import info.hellovass.network.Result
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 
 class MainRepo : IRepo {
 
