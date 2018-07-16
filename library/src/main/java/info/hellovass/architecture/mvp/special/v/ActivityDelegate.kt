@@ -4,17 +4,13 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import info.hellovass.architecture.mvp.special.p.isToolbarHidded
 import info.hellovass.library.R
 
 
 abstract class ActivityDelegate(val activity: AppCompatActivity) : IDelegate {
 
-    protected lateinit var toolbar: Toolbar
-
-    private val Toolbar.isHidden: Boolean
-        get() {
-            return y < 0
-        }
+    internal lateinit var toolbar: Toolbar
 
     fun <V : View> find(id: Int): V {
 
@@ -45,7 +41,7 @@ abstract class ActivityDelegate(val activity: AppCompatActivity) : IDelegate {
 
         toolbar = find(R.id.toolbar)
         toolbar.animate()
-                .translationY(if (toolbar.isHidden) 0.0F else -toolbar.height.toFloat())
+                .translationY(if (isToolbarHidded) 0.0F else -toolbar.height.toFloat())
                 .setInterpolator(DecelerateInterpolator(2.0F))
                 .start()
     }

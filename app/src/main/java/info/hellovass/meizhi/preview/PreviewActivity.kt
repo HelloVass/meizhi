@@ -21,7 +21,7 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
 
         viewDelegate?.setTitle("预览")
 
-        viewDelegate?.setupNavigation(R.drawable.ic_navi_back, View.OnClickListener { finish() })
+        viewDelegate?.setupNavigation(R.drawable.ic_navi_back, View.OnClickListener { onBackPressed() })
 
         viewDelegate?.setupMenu(R.menu.menu_preview, Toolbar.OnMenuItemClickListener { item ->
 

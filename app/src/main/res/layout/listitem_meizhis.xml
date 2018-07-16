@@ -19,8 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:minHeight="160dp"
-            android:scaleType="fitCenter"
+            android:minHeight="180dp"
             tools:src="@mipmap/ic_launcher" />
 
         <LinearLayout
@@ -39,6 +38,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textColor="#000000"
+                android:textSize="16sp"
                 tools:text="名字" />
 
         </LinearLayout>
