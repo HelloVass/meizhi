@@ -7,9 +7,9 @@ import info.hellovass.architecture.mvp.special.v.IDelegate
 
 abstract class ActivityPresenter<V : IDelegate, M : IRepo> : AppCompatActivity() {
 
-    protected var viewDelegate: V? = null
+    var viewDelegate: V? = null
 
-    protected var repo: M? = null
+    var repo: M? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

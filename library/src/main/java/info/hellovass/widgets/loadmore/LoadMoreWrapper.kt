@@ -64,19 +64,15 @@ class LoadMoreWrapper(val context: Context, val adapter: RecyclerView.Adapter<Re
 
     override fun setHasStableIds(hasStableIds: Boolean) {
         super.setHasStableIds(hasStableIds)
-        // 转发
         adapter.setHasStableIds(hasStableIds)
     }
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
         super.onViewRecycled(holder)
-
-        // 转发
         adapter.onViewRecycled(holder)
     }
 
     fun notifyStatusChanged(newStatus: Status) {
-
         if (status != newStatus) {
             status = newStatus
             notifyDataSetChanged()
@@ -88,7 +84,6 @@ class LoadMoreWrapper(val context: Context, val adapter: RecyclerView.Adapter<Re
         fun onBindViewHolder(status: Status) {
 
             itemView.tvTitle.apply {
-
                 text = status.title ?: ""
             }
         }
