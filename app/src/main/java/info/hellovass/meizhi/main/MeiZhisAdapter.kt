@@ -5,13 +5,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
-import info.hellovass.dto.MeiZhiDTO
+import info.hellovass.dto.MeiZhi
 import info.hellovass.meizhi.R
 import kotlinx.android.synthetic.main.listitem_meizhis.view.*
 
 class MeiZhisAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val meizhis: MutableList<MeiZhiDTO> = mutableListOf()
+    private val meizhis: MutableList<MeiZhi> = mutableListOf()
 
     var onMeiZhiTouchListener: OnMeiZhiTouchListener? = null
 
@@ -31,14 +31,14 @@ class MeiZhisAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.V
         (holder as MeiZhiVH).onBindViewHolder(meizhis[position], position)
     }
 
-    fun setItems(data: List<MeiZhiDTO>) {
+    fun setItems(data: List<MeiZhi>) {
 
         meizhis.clear()
         meizhis.addAll(data)
         notifyDataSetChanged()
     }
 
-    fun addItems(data: List<MeiZhiDTO>) {
+    fun addItems(data: List<MeiZhi>) {
 
         val startIndex: Int = meizhis.size
         val itemCount: Int = data.count()
@@ -48,26 +48,26 @@ class MeiZhisAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.V
 
     class MeiZhiVH(itemView: View, private val onMeiZhiTouchListener: OnMeiZhiTouchListener?) : RecyclerView.ViewHolder(itemView) {
 
-        fun onBindViewHolder(meiZhiDTO: MeiZhiDTO, position: Int) {
+        fun onBindViewHolder(meiZhi: MeiZhi, position: Int) {
 
             itemView.apply {
 
                 Glide.with(context)
-                        .load(meiZhiDTO.url)
+                        .load(meiZhi.url)
                         .into(ivCover)
 
-                tvTitle.text = meiZhiDTO.desc
+                tvTitle.text = meiZhi.desc
             }
 
             itemView.setOnClickListener { itemView ->
 
-                onMeiZhiTouchListener?.onTouch(itemView, itemView.ivCover, meiZhiDTO)
+                onMeiZhiTouchListener?.onTouch(itemView, itemView.ivCover, meiZhi)
             }
         }
     }
 
     abstract class OnMeiZhiTouchListener {
 
-        abstract fun onTouch(view: View, imageView: View, meiZhiDTO: MeiZhiDTO)
+        abstract fun onTouch(view: View, imageView: View, meiZhi: MeiZhi)
     }
 }

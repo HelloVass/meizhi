@@ -64,15 +64,18 @@ class LoadMoreWrapper(val context: Context, val adapter: RecyclerView.Adapter<Re
 
     override fun setHasStableIds(hasStableIds: Boolean) {
         super.setHasStableIds(hasStableIds)
+
         adapter.setHasStableIds(hasStableIds)
     }
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
         super.onViewRecycled(holder)
+
         adapter.onViewRecycled(holder)
     }
 
     fun notifyStatusChanged(newStatus: Status) {
+
         if (status != newStatus) {
             status = newStatus
             notifyDataSetChanged()

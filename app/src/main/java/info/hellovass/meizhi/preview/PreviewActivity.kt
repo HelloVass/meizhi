@@ -1,6 +1,5 @@
 package info.hellovass.meizhi.preview
 
-import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.View
@@ -9,9 +8,6 @@ import info.hellovass.architecture.mvp.special.p.ActivityPresenter
 import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.meizhi.R
 import info.hellovass.network.MaybeHelper
-import info.hellovass.network.ObservableHelper
-import info.hellovass.network.Resource
-import io.reactivex.android.schedulers.AndroidSchedulers
 
 class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
 
@@ -57,12 +53,7 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
 
     private fun saveImageToDisk() {
 
-        repo?.let {
-            it.saveImageToDisk(this, imageUrl, fileName)
-                    .compose(transform())
-                    .compose(MaybeHelper.io2main())
-                    .subscribe { dispatchResult(it) }
-        }
+
     }
 }
 

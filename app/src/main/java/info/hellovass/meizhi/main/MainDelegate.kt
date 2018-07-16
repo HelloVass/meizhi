@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import info.hellovass.architecture.mvp.special.v.ActivityDelegate
-import info.hellovass.dto.MeiZhiDTO
+import info.hellovass.dto.MeiZhi
 import info.hellovass.meizhi.R
 import info.hellovass.widgets.loadmore.ILoadMore
 import info.hellovass.widgets.loadmore.LoadMore
@@ -57,11 +57,11 @@ class MainDelegate(activity: AppCompatActivity) : ActivityDelegate(activity), IL
         refreshLayout.setOnRefreshListener(onRefreshListener)
     }
 
-    fun setItems(data: List<MeiZhiDTO>) {
+    fun setItems(data: List<MeiZhi>) {
         viewAdapter.setItems(data)
     }
 
-    fun addItems(data: List<MeiZhiDTO>) {
+    fun addItems(data: List<MeiZhi>) {
         viewAdapter.addItems(data)
     }
 

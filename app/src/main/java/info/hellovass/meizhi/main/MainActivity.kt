@@ -7,10 +7,12 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
 import info.hellovass.architecture.mvp.special.v.showSnackbar
-import info.hellovass.dto.MeiZhiDTO
+import info.hellovass.dto.MeiZhi
+import info.hellovass.dto.UIStateModel
 import info.hellovass.meizhi.R
 import info.hellovass.meizhi.preview.PreviewActivity
-import info.hellovass.network.*
+import info.hellovass.network.Action
+import info.hellovass.network.ObservableHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.intentFor
@@ -55,7 +57,7 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
         // 列表控件初始化
         viewDelegate?.setupRcvList(object : MeiZhisAdapter.OnMeiZhiTouchListener() {
 
-            override fun onTouch(view: View, imageView: View, meiZhiDTO: MeiZhiDTO) {
+            override fun onTouch(view: View, imageView: View, meiZhiDTO: MeiZhi) {
 
                 val intent = intentFor<PreviewActivity>("url" to meiZhiDTO.url, "desc" to meiZhiDTO.desc)
 
@@ -93,15 +95,13 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
             pageNum = 1
         }
 
-        repo?.let {repo->
-
-            repo.getMeiZhis(count = 10, page = pageNum)
-                    .map { Resource.success(it.results) }
-                    .onErrorReturn { Resource.error(it.message) }
-                    .doOnSubscribe { Resource.loading<List<MeiZhiDTO>>() }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { dispatchResult(action, it) }
+        repo?.let { repo ->
+            repo.getMeiZhiData(count = 10, page = pageNum)
+                    .map { result -> UIStateModel.succeed(result) }
+                    .onErrorReturn { UIStateModel.failed(it.message) }
+                    .startWith(UIStateModel.loading())
+                    .compose(ObservableHelper.io2main())
+                    .subscribe { UIState -> dispatchResult(action, UIState) }
         }
     }
 }

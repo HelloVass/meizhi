@@ -1,7 +1,8 @@
 package info.hellovass.dto
 
+data class MeiZhiData(val error: Boolean, val results: List<MeiZhi>)
 
-data class MeiZhiDTO(
+data class MeiZhi(
         val _id: String,
         val createdAt: String,
         val desc: String,
