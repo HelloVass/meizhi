@@ -1,5 +1,6 @@
 package info.hellovass.meizhi.preview
 
+import android.Manifest
 import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.architecture.mvp.special.v.showToast
 import info.hellovass.dto.image.UIStateModel
@@ -15,6 +16,13 @@ val PreviewActivity.fileName: String
         val name: String = intent.extras.getString("desc")
         return "$name.jpg"
     }
+
+@Suppress("unused")
+val PreviewActivity.permission: String
+    get() {
+        return Manifest.permission.WRITE_EXTERNAL_STORAGE
+    }
+
 
 fun PreviewActivity.dispatchResult(uiStateModel: UIStateModel) {
 

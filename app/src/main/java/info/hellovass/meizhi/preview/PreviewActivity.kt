@@ -1,5 +1,6 @@
 package info.hellovass.meizhi.preview
 
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.View
@@ -9,6 +10,8 @@ import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.dto.image.UIStateModel
 import info.hellovass.meizhi.R
 import info.hellovass.network.ObservableHelper
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 
 class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
 
@@ -54,10 +57,17 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
 
     private fun saveImageToDisk() {
 
-        repo?.let {
-            it.saveImageToDisk(this, imageUrl, fileName)
-                    .toObservable()
-                    .map { result -> UIStateModel.succeed(result) }
+        repo?.let { repo ->
+
+            val o1 = repo.requestPermission(this, permission)
+            val o2 = repo.saveToDisk(this, imageUrl, fileName)
+
+            Observable.zip<Boolean, Uri, UIStateModel>(o1, o2, BiFunction { granted, uri ->
+                if (!granted)
+                    UIStateModel.failed("授权失败")
+                else
+                    UIStateModel.succeed(uri)
+            })
                     .onErrorReturn { UIStateModel.failed(it.message) }
                     .startWith(UIStateModel.loading())
                     .compose(ObservableHelper.io2main())
