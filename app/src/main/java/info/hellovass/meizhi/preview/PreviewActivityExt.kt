@@ -1,9 +1,11 @@
 package info.hellovass.meizhi.preview
 
 import android.Manifest
+import android.net.Uri
 import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.architecture.mvp.special.v.showToast
-import info.hellovass.dto.image.UIStateModel
+import info.hellovass.dto.Status
+import info.hellovass.dto.UIStateDTO
 
 
 val PreviewActivity.imageUrl: String
@@ -24,19 +26,18 @@ val PreviewActivity.permission: String
     }
 
 
-fun PreviewActivity.dispatchResult(uiStateModel: UIStateModel) {
+fun PreviewActivity.dispatchUri(uiStateDTO: UIStateDTO<Uri>) {
 
-    when {
-        uiStateModel.isLoading() -> {
+    when (uiStateDTO.status) {
+        Status.Loading -> {
             viewDelegate?.showToast("下载中...")
         }
-        uiStateModel.isFailed() -> {
-            viewDelegate?.showSnackbar(uiStateModel.getError())
-
-        }
-        uiStateModel.isSucceed() -> {
+        Status.Succeed -> {
             viewDelegate?.showSnackbar("{图片已保存至${PreviewRepo.saveDir}目录下}")
-            viewDelegate?.notifyGallery(uiStateModel.getData())
+            viewDelegate?.notifyGallery(uiStateDTO.getData())
+        }
+        Status.Failed -> {
+            viewDelegate?.showSnackbar(uiStateDTO.getError())
         }
     }
 }

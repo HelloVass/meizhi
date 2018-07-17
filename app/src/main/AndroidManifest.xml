@@ -2,8 +2,9 @@
     package="info.hellovass.meizhi">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!--敏感权限-->
     <uses-permission-sdk-23 android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission-sdk-23 android:name="android.permission.CAMERA" />
 
     <application
         android:name=".App"

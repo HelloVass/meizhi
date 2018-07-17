@@ -8,13 +8,13 @@ import android.view.View
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
 import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.delegates.SpfDelegate
-import info.hellovass.dto.meizhi.MeiZhi
-import info.hellovass.dto.meizhi.UIStateModel
+import info.hellovass.dto.MeiZhi
+import info.hellovass.dto.UIStateDTO
 import info.hellovass.meizhi.App
 import info.hellovass.meizhi.R
 import info.hellovass.meizhi.preview.PreviewActivity
 import info.hellovass.network.Action
-import info.hellovass.network.ObservableHelper
+import info.hellovass.network.RxSchedulersHelper
 import org.jetbrains.anko.intentFor
 
 class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
@@ -57,9 +57,9 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
         // 列表控件初始化
         viewDelegate?.setupRcvList(object : MeiZhisAdapter.OnMeiZhiTouchListener() {
 
-            override fun onTouch(view: View, imageView: View, meiZhiDTO: MeiZhi) {
+            override fun onTouch(view: View, imageView: View, meizhi: MeiZhi) {
 
-                val intent = intentFor<PreviewActivity>("url" to meiZhiDTO.url, "desc" to meiZhiDTO.desc)
+                val intent = intentFor<PreviewActivity>("url" to meizhi.url, "desc" to meizhi.desc)
 
                 val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this@MainActivity,
                         imageView, "picture")
@@ -97,11 +97,11 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
 
         repo?.let { repo ->
             repo.getMeiZhiData(count = 10, page = pageNum)
-                    .map { result -> UIStateModel.succeed(result) }
-                    .onErrorReturn { UIStateModel.failed(it.message) }
-                    .startWith(UIStateModel.loading())
-                    .compose(ObservableHelper.io2main())
-                    .subscribe { UIState -> dispatchResult(action, UIState) }
+                    .map { result -> UIStateDTO.success(result) }
+                    .onErrorReturn { result -> UIStateDTO.error(result.message) }
+                    .startWith(UIStateDTO.loading())
+                    .compose(RxSchedulersHelper.io2main())
+                    .subscribe { uiStateDTO -> dispatchResult(action, uiStateDTO) }
         }
     }
 }

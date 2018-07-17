@@ -1,33 +1,35 @@
 package info.hellovass.meizhi.main
 
 import info.hellovass.architecture.mvp.special.v.showSnackbar
-import info.hellovass.dto.meizhi.UIStateModel
+import info.hellovass.dto.MeiZhi
+import info.hellovass.dto.Status
+import info.hellovass.dto.UIStateDTO
 import info.hellovass.network.Action
 
-fun MainActivity.dispatchResult(action: Action, uiState: UIStateModel) {
+fun MainActivity.dispatchResult(action: Action, uiStateDTO: UIStateDTO<List<MeiZhi>>) {
 
     when (action) {
         Action.Refresh -> {
-            handleRefresh(uiState)
+            handleRefresh(uiStateDTO)
         }
         Action.LoadMore -> {
-            handleLoadMore(uiState)
+            handleLoadMore(uiStateDTO)
         }
     }
 }
 
-fun MainActivity.handleRefresh(uiState: UIStateModel) {
+fun MainActivity.handleRefresh(uiStateDTO: UIStateDTO<List<MeiZhi>>) {
 
-    when {
-        uiState.isLoading() -> {
+    when (uiStateDTO.status) {
+        Status.Loading -> {
             viewDelegate?.showRefreshing(true)
         }
-        uiState.isFailed() -> {
+        Status.Failed -> {
             viewDelegate?.showRefreshing(false)
-            viewDelegate?.showSnackbar(uiState.getError())
+            viewDelegate?.showSnackbar(uiStateDTO.getError())
         }
-        uiState.isSucceed() -> {
-            viewDelegate?.setItems(uiState.getData().results)
+        Status.Succeed -> {
+            viewDelegate?.setItems(uiStateDTO.getData())
             viewDelegate?.showRefreshing(false)
             viewDelegate?.resetLoadMore()
             pageNum++
@@ -35,20 +37,20 @@ fun MainActivity.handleRefresh(uiState: UIStateModel) {
     }
 }
 
-fun MainActivity.handleLoadMore(uiState: UIStateModel) {
+fun MainActivity.handleLoadMore(uiStateDTO: UIStateDTO<List<MeiZhi>>) {
 
-    when {
-        uiState.isLoading() -> {
+    when (uiStateDTO.status) {
+        Status.Loading -> {
             viewDelegate?.onLoadMoreBegin()
         }
-        uiState.isSucceed() -> {
-            viewDelegate?.addItems(uiState.getData().results)
+        Status.Succeed -> {
+            viewDelegate?.addItems(uiStateDTO.getData())
             viewDelegate?.onLoadMoreSucceed(true)
             pageNum++
         }
-        uiState.isFailed() -> {
+        Status.Failed -> {
             viewDelegate?.onLoadMoreFailed()
-            viewDelegate?.showSnackbar(uiState.getError())
+            viewDelegate?.showSnackbar(uiStateDTO.getError())
         }
     }
 }
