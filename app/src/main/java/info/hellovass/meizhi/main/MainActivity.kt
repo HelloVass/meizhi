@@ -7,8 +7,10 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
 import info.hellovass.architecture.mvp.special.v.showSnackbar
+import info.hellovass.delegates.SpfDelegate
 import info.hellovass.dto.meizhi.MeiZhi
 import info.hellovass.dto.meizhi.UIStateModel
+import info.hellovass.meizhi.App
 import info.hellovass.meizhi.R
 import info.hellovass.meizhi.preview.PreviewActivity
 import info.hellovass.network.Action
@@ -17,7 +19,7 @@ import org.jetbrains.anko.intentFor
 
 class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
 
-    var pageNum = 1
+    var pageNum: Int by SpfDelegate(App.getInstance(), "meizhi", "pageNum", 1)
 
     override fun createRepo(): MainRepo? {
 

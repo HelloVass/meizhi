@@ -1,12 +1,14 @@
 package info.hellovass.meizhi.preview
 
+import android.Manifest
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.View
 import com.github.chrisbanes.photoview.OnViewTapListener
+import com.tbruyelle.rxpermissions2.RxPermissions
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
-import info.hellovass.architecture.mvp.special.v.showSnackbar
+import info.hellovass.architecture.mvp.special.v.showToast
 import info.hellovass.dto.image.UIStateModel
 import info.hellovass.meizhi.R
 import info.hellovass.network.ObservableHelper
@@ -19,7 +21,19 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
 
     override fun createRepo(): PreviewRepo? = PreviewRepo()
 
-    override fun initWidgets() {}
+    override fun initWidgets() {
+
+        RxPermissions(this)
+                .request(Manifest.permission.CAMERA)
+                .subscribe { granted ->
+
+                    if (!granted) {
+                        viewDelegate?.showToast("授权失败")
+                    }else{
+                        viewDelegate?.showToast("授权成功")
+                    }
+                }
+    }
 
     override fun bindEvent() {
 
@@ -35,7 +49,7 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
                     true
                 }
                 R.id.action_share -> {
-                    viewDelegate?.showSnackbar("开发中...")
+
                     true
                 }
                 else -> {
