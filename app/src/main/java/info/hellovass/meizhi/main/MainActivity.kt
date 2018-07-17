@@ -7,14 +7,12 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
 import info.hellovass.architecture.mvp.special.v.showSnackbar
-import info.hellovass.dto.MeiZhi
-import info.hellovass.dto.UIStateModel
+import info.hellovass.dto.meizhi.MeiZhi
+import info.hellovass.dto.meizhi.UIStateModel
 import info.hellovass.meizhi.R
 import info.hellovass.meizhi.preview.PreviewActivity
 import info.hellovass.network.Action
 import info.hellovass.network.ObservableHelper
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.intentFor
 
 class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {

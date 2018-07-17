@@ -1,9 +1,11 @@
-package info.hellovass.dto
+package info.hellovass.dto.image
+
+import android.net.Uri
+
 
 data class UIStateModel(private val inProgress: Boolean = false,
                         private val error: String? = null,
-                        private val data: MeiZhiData? = null) {
-
+                        private val data: Uri? = null) {
     companion object {
 
         fun loading(): UIStateModel {
@@ -11,7 +13,7 @@ data class UIStateModel(private val inProgress: Boolean = false,
             return UIStateModel(inProgress = true)
         }
 
-        fun succeed(data: MeiZhiData): UIStateModel {
+        fun succeed(data: Uri): UIStateModel {
 
             return UIStateModel(data = data)
         }
@@ -29,15 +31,15 @@ data class UIStateModel(private val inProgress: Boolean = false,
 
     fun isFailed(): Boolean {
 
-        return data?.error ?: true || error != null
+        return error != null
     }
 
     fun isSucceed(): Boolean {
 
-        return data?.results?.isNotEmpty() ?: false && !isFailed()
+        return data != null && !isFailed()
     }
 
-    fun getData(): MeiZhiData {
+    fun getData(): Uri {
 
         return data ?: throw IllegalStateException("data can't be null")
     }

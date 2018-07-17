@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
-import info.hellovass.dto.MeiZhi
+import info.hellovass.dto.meizhi.MeiZhi
 import info.hellovass.meizhi.R
 import kotlinx.android.synthetic.main.listitem_meizhis.view.*
 

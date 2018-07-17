@@ -1,9 +1,8 @@
 package info.hellovass.meizhi.main
 
 import info.hellovass.architecture.mvp.special.v.showSnackbar
-import info.hellovass.dto.UIStateModel
+import info.hellovass.dto.meizhi.UIStateModel
 import info.hellovass.network.Action
-import info.hellovass.network.Status
 
 fun MainActivity.dispatchResult(action: Action, uiState: UIStateModel) {
 

@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import info.hellovass.architecture.mvp.special.v.ActivityDelegate
-import info.hellovass.dto.MeiZhi
+import info.hellovass.dto.meizhi.MeiZhi
 import info.hellovass.meizhi.R
 import info.hellovass.widgets.loadmore.ILoadMore
 import info.hellovass.widgets.loadmore.LoadMore

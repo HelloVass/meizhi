@@ -6,8 +6,9 @@ import android.view.View
 import com.github.chrisbanes.photoview.OnViewTapListener
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
 import info.hellovass.architecture.mvp.special.v.showSnackbar
+import info.hellovass.dto.image.UIStateModel
 import info.hellovass.meizhi.R
-import info.hellovass.network.MaybeHelper
+import info.hellovass.network.ObservableHelper
 
 class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
 
@@ -31,7 +32,7 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
                     true
                 }
                 R.id.action_share -> {
-                    viewDelegate?.showSnackbar("开发中")
+                    viewDelegate?.showSnackbar("开发中...")
                     true
                 }
                 else -> {
@@ -53,7 +54,15 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
 
     private fun saveImageToDisk() {
 
-
+        repo?.let {
+            it.saveImageToDisk(this, imageUrl, fileName)
+                    .toObservable()
+                    .map { result -> UIStateModel.succeed(result) }
+                    .onErrorReturn { UIStateModel.failed(it.message) }
+                    .startWith(UIStateModel.loading())
+                    .compose(ObservableHelper.io2main())
+                    .subscribe { dispatchResult(it) }
+        }
     }
 }
 

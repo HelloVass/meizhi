@@ -1,26 +1,21 @@
 package info.hellovass.meizhi.preview
 
 import android.app.Activity
-import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Bundle
 import android.os.Environment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.FutureTarget
 import info.hellovass.architecture.mvp.special.m.IRepo
 import io.reactivex.Maybe
-import io.reactivex.MaybeOnSubscribe
-import io.reactivex.functions.Function
-import io.reactivex.schedulers.Schedulers
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
 
 class PreviewRepo : IRepo {
 
-    val saveDir: String = File(Environment.getExternalStorageDirectory(), "MeiZhi").absolutePath
+    companion object {
+        val saveDir: String = File(Environment.getExternalStorageDirectory(), "MeiZhi").absolutePath
+    }
 
     fun saveImageToDisk(activity: Activity, imageUrl: String, fileName: String): Maybe<Uri> {
 
