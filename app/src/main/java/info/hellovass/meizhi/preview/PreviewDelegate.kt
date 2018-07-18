@@ -1,9 +1,12 @@
 package info.hellovass.meizhi.preview
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
+import android.widget.ImageView
+import android.widget.ProgressBar
 import com.bumptech.glide.Glide
 import com.github.chrisbanes.photoview.OnViewTapListener
 import com.github.chrisbanes.photoview.PhotoView
@@ -14,11 +17,10 @@ class PreviewDelegate(activity: AppCompatActivity) : ActivityDelegate(activity) 
 
     override fun getLayoutResId(): Int = R.layout.activity_preview
 
-    fun loadImage(extras: Bundle?) {
+    fun setBitmap(bitmap: Bitmap) {
 
-        Glide.with(activity)
-                .load(extras?.getString("url"))
-                .into(find(R.id.ivPreview))
+       find<ImageView>(R.id.ivPreview)
+               .setImageBitmap(bitmap)
     }
 
     fun bindOnViewTapListener(onViewTapListener: OnViewTapListener) {

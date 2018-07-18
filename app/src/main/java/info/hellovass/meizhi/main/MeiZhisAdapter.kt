@@ -48,12 +48,16 @@ class MeiZhisAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.V
 
     class MeiZhiVH(itemView: View, private val onMeiZhiTouchListener: OnMeiZhiTouchListener?) : RecyclerView.ViewHolder(itemView) {
 
+        init {
+            itemView.ivCover.setOriginalSize(280, 360)
+        }
+
         fun onBindViewHolder(meiZhi: MeiZhi, position: Int) {
 
             itemView.apply {
 
                 Glide.with(context)
-                        .load(meiZhi.url)
+                        .load(meiZhi.url.replace("large", "wap360"))
                         .into(ivCover)
 
                 tvTitle.text = meiZhi.desc

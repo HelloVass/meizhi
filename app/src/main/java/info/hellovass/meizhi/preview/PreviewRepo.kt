@@ -1,11 +1,13 @@
 package info.hellovass.meizhi.preview
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.FutureTarget
+import com.bumptech.glide.request.RequestListener
 import info.hellovass.architecture.mvp.special.m.IRepo
 import io.reactivex.Maybe
 import io.reactivex.Observable
@@ -66,6 +68,22 @@ class PreviewRepo : IRepo {
                 it.onError(e)
             }
         }
+    }
+
+    fun loadImage(context: Context, imageUrl: String): Observable<Bitmap> {
+
+        return Maybe.create<Bitmap> { emitter ->
+
+            try {
+                val target = Glide.with(context)
+                        .asBitmap()
+                        .load(imageUrl)
+                        .submit()
+                emitter.onSuccess(target.get())
+            } catch (e: Throwable) {
+                emitter.onError(e)
+            }
+        }.toObservable()
     }
 }
 

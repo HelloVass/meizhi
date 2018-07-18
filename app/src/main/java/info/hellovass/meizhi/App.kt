@@ -8,7 +8,7 @@ class App : Application() {
 
         private lateinit var sINSTANCE: App
 
-        fun getInstance(): App {
+        fun get(): App {
 
             return sINSTANCE
         }

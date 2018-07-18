@@ -7,19 +7,17 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
 import info.hellovass.architecture.mvp.special.v.showSnackbar
-import info.hellovass.delegates.SpfDelegate
+import info.hellovass.meizhi.SpfDelegate
 import info.hellovass.dto.MeiZhi
 import info.hellovass.dto.UIStateDTO
-import info.hellovass.meizhi.App
 import info.hellovass.meizhi.R
 import info.hellovass.meizhi.preview.PreviewActivity
-import info.hellovass.network.Action
 import info.hellovass.network.RxSchedulersHelper
 import org.jetbrains.anko.intentFor
 
 class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
 
-    var pageNum: Int by SpfDelegate(App.getInstance(), "meizhi", "pageNum", 1)
+    var pageNum: Int = 1
 
     override fun createRepo(): MainRepo? {
 
@@ -65,33 +63,37 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
                         imageView, "picture")
 
                 ActivityCompat.startActivity(this@MainActivity, intent, optionsCompat.toBundle())
-
             }
         })
 
         // 加载更多控件初始化
         viewDelegate?.setupLoadMore {
-            loadData(Action.LoadMore)
+            loadData(false)
         }
     }
 
     override fun bindEvent() {
 
+        // Toolbar 点击事件
+        viewDelegate?.bindToolbarClickListener(View.OnClickListener {
+            viewDelegate?.smoothScrollToPosition()
+        })
+
         // 绑定下拉刷新事件
         viewDelegate?.bindOnRefreshListener {
-            loadData(Action.Refresh)
+            loadData(true)
         }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
 
-        loadData(Action.Refresh)
+        loadData(true)
     }
 
-    private fun loadData(action: Action) {
+    private fun loadData(pullToRefresh: Boolean) {
 
-        if (action == Action.Refresh) {
+        if (pullToRefresh) {
             pageNum = 1
         }
 
@@ -101,7 +103,7 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
                     .onErrorReturn { result -> UIStateDTO.error(result.message) }
                     .startWith(UIStateDTO.loading())
                     .compose(RxSchedulersHelper.io2main())
-                    .subscribe { uiStateDTO -> dispatchResult(action, uiStateDTO) }
+                    .subscribe { uiStateDTO -> dispatchResult(pullToRefresh, uiStateDTO) }
         }
     }
 }

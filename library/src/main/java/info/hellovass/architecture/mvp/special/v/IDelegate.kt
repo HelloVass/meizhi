@@ -14,4 +14,10 @@ interface IDelegate {
     fun setupMenu(id: Int, listener: Toolbar.OnMenuItemClickListener)
 
     fun hideOrShowToolbar()
+
+    fun bindToolbarClickListener(listener: View.OnClickListener)
+
+    fun showProgressbar()
+
+    fun hideProgressbar()
 }

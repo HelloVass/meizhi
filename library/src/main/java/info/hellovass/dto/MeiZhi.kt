@@ -7,7 +7,7 @@ data class MeiZhi(
         val publishedAt: String,
         val source: String,
         val type: String,
-        val url: String,
+        var url: String,
         val used: Boolean,
         val who: String
 )

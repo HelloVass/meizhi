@@ -16,7 +16,7 @@ class RatioImageView : ImageView {
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    fun setOriginalSize(width: Int = 50, height: Int = 50) {
+    fun setOriginalSize(width: Int = 150, height: Int = 200) {
 
         originalWidth = width
         originalHeight = height
@@ -26,7 +26,7 @@ class RatioImageView : ImageView {
 
         if (originalWidth > 0 && originalWidth > 0) {
 
-            val ratio: Float = originalWidth / originalHeight * 1.0F
+            val ratio: Float = originalWidth * 1.0F / originalHeight
 
             val width = MeasureSpec.getSize(widthMeasureSpec)
             var height = MeasureSpec.getSize(heightMeasureSpec)

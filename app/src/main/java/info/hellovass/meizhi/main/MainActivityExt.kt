@@ -4,15 +4,14 @@ import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.dto.MeiZhi
 import info.hellovass.dto.Status
 import info.hellovass.dto.UIStateDTO
-import info.hellovass.network.Action
 
-fun MainActivity.dispatchResult(action: Action, uiStateDTO: UIStateDTO<List<MeiZhi>>) {
+fun MainActivity.dispatchResult(pullToRefresh: Boolean, uiStateDTO: UIStateDTO<List<MeiZhi>>) {
 
-    when (action) {
-        Action.Refresh -> {
+    when {
+        pullToRefresh -> {
             handleRefresh(uiStateDTO)
         }
-        Action.LoadMore -> {
+        else -> {
             handleLoadMore(uiStateDTO)
         }
     }

@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import android.widget.ProgressBar
 import info.hellovass.architecture.mvp.special.p.isToolbarHidded
 import info.hellovass.library.R
 
@@ -44,5 +45,23 @@ abstract class ActivityDelegate(val activity: AppCompatActivity) : IDelegate {
                 .translationY(if (isToolbarHidded) 0.0F else -toolbar.height.toFloat())
                 .setInterpolator(DecelerateInterpolator(2.0F))
                 .start()
+    }
+
+    override fun bindToolbarClickListener(listener: View.OnClickListener) {
+
+        toolbar = find(R.id.toolbar)
+        toolbar.setOnClickListener(listener)
+    }
+
+    override fun showProgressbar() {
+
+        find<ProgressBar>(R.id.progressbar)
+                .visibility = View.VISIBLE
+    }
+
+    override fun hideProgressbar() {
+
+        find<ProgressBar>(R.id.progressbar)
+                .visibility = View.GONE
     }
 }

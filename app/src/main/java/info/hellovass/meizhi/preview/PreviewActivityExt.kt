@@ -1,6 +1,7 @@
 package info.hellovass.meizhi.preview
 
 import android.Manifest
+import android.graphics.Bitmap
 import android.net.Uri
 import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.architecture.mvp.special.v.showToast
@@ -10,12 +11,12 @@ import info.hellovass.dto.UIStateDTO
 
 val PreviewActivity.imageUrl: String
     get() {
-        return intent.extras.getString("url")
+        return intent.extras.getString("url", "")
     }
 
 val PreviewActivity.fileName: String
     get() {
-        val name: String = intent.extras.getString("desc")
+        val name: String = intent.extras.getString("desc", "")
         return "$name.jpg"
     }
 
@@ -24,6 +25,23 @@ val PreviewActivity.permission: String
     get() {
         return Manifest.permission.WRITE_EXTERNAL_STORAGE
     }
+
+fun PreviewActivity.dispatchBitmap(uiStateDTO: UIStateDTO<Bitmap>) {
+
+    when (uiStateDTO.status) {
+        Status.Loading -> {
+            viewDelegate?.showProgressbar()
+        }
+        Status.Succeed -> {
+            viewDelegate?.hideProgressbar()
+            viewDelegate?.setBitmap(uiStateDTO.getData())
+        }
+        Status.Failed -> {
+            viewDelegate?.hideProgressbar()
+            viewDelegate?.showSnackbar(uiStateDTO.getError())
+        }
+    }
+}
 
 
 fun PreviewActivity.dispatchUri(uiStateDTO: UIStateDTO<Uri>) {

@@ -47,13 +47,20 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
 
-        viewDelegate?.loadImage(intent.extras)
+        repo?.let { myRepo ->
+            myRepo.loadImage(this, imageUrl.replace("large", "wap720"))
+                    .map { result -> UIStateDTO.success(result) }
+                    .onErrorReturn { result -> UIStateDTO.error(result.message) }
+                    .startWith(UIStateDTO.loading())
+                    .compose(RxSchedulersHelper.io2main())
+                    .subscribe { result -> dispatchBitmap(result) }
+        }
     }
 
     private fun saveImageToDisk() {
 
-        repo?.let { it ->
-            it.saveToDisk(this, imageUrl, fileName)
+        repo?.let { myRepo ->
+            myRepo.saveToDisk(this, imageUrl, fileName)
                     .map { result -> UIStateDTO.success(result) }
                     .onErrorReturn { result -> UIStateDTO.error(result.message) }
                     .startWith(UIStateDTO.loading())

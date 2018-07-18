@@ -1,16 +1,17 @@
-package info.hellovass.delegates
+package info.hellovass.meizhi
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import kotlin.reflect.KProperty
 
-@Suppress("IMPLICIT_CAST_TO_ANY", "UNCHECKED_CAST")
-class SpfDelegate<T>(context: Application, private val spfName: String, private val key: String, private val value: T) {
+class SpfDelegate<T>(private val spfName: String, private val key: String, private val value: T) {
 
-    private val spf: SharedPreferences  by lazy { context.getSharedPreferences(spfName, Context.MODE_PRIVATE) }
+    private val preferences: SharedPreferences  by lazy {
+        App.get().getSharedPreferences(spfName, Context.MODE_PRIVATE)
+    }
 
-    operator fun getValue(thisRef: Any?, property: KProperty<*>): T = with(spf) {
+    @Suppress("IMPLICIT_CAST_TO_ANY", "UNCHECKED_CAST")
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): T = with(preferences) {
 
         when (value) {
             is Long ->
@@ -28,7 +29,7 @@ class SpfDelegate<T>(context: Application, private val spfName: String, private 
         } as T
     }
 
-    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T) = with(spf.edit()) {
+    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T) = with(preferences.edit()) {
 
         when (value) {
             is Long ->

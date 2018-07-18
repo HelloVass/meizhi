@@ -84,4 +84,8 @@ class MainDelegate(activity: AppCompatActivity) : ActivityDelegate(activity), IL
     override fun resetLoadMore() {
         loadMore.resetLoadMore()
     }
+
+    fun smoothScrollToPosition() {
+        rcvList.smoothScrollToPosition(0)
+    }
 }
