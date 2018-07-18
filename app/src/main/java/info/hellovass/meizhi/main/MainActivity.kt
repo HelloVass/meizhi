@@ -5,6 +5,8 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.widget.Toolbar
 import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
 import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.dto.MeiZhi
@@ -52,16 +54,21 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
         viewDelegate?.setupRefreshLayout()
 
         // 列表控件初始化
-        viewDelegate?.setupRcvList(object : MeiZhisAdapter.OnMeiZhiTouchListener() {
+        viewDelegate?.setupRcvList(object : MeiZhisAdapter.OnTouchListener {
 
-            override fun onTouch(view: View, imageView: View, meizhi: MeiZhi) {
+            override fun onImageTouch(imageArea: ImageView, view: View, meizhi: MeiZhi) {
 
                 val intent = intentFor<PreviewActivity>("large" to meizhi.url, "desc" to meizhi.desc)
 
                 val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this@MainActivity,
-                        imageView, "picture")
+                        imageArea, "picture")
 
                 ActivityCompat.startActivity(this@MainActivity, intent, optionsCompat.toBundle())
+            }
+
+            override fun onBlankTouch(blankArea: LinearLayout, view: View, meizhi: MeiZhi) {
+
+                viewDelegate?.showSnackbar("开发中...")
             }
         })
 

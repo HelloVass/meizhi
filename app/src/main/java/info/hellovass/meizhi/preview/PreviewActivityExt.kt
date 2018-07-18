@@ -57,7 +57,7 @@ fun PreviewActivity.dispatchUri(uiStateDTO: UIStateDTO<Uri>) {
 
     when (uiStateDTO.status) {
         Status.Loading -> {
-            viewDelegate?.showToast("下载中...")
+            // do nothing
         }
         Status.Succeed -> {
             viewDelegate?.showSnackbar("{图片已保存至${PreviewRepo.saveDir}目录下}")

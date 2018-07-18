@@ -32,13 +32,13 @@ class MainDelegate(activity: AppCompatActivity) : ActivityDelegate(activity), IL
                 R.color.refresh_progress_3)
     }
 
-    fun setupRcvList(onMeiZhiTouchListener: MeiZhisAdapter.OnMeiZhiTouchListener) {
+    fun setupRcvList(onTouchListener: MeiZhisAdapter.OnTouchListener) {
         rcvList = find(R.id.rcvList)
         rcvList.layoutManager = StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.VERTICAL)
         viewAdapter = MeiZhisAdapter(activity)
         rcvList.adapter = viewAdapter
-        viewAdapter.onMeiZhiTouchListener = onMeiZhiTouchListener
+        viewAdapter.mOnTouchListener = onTouchListener
     }
 
     fun setupLoadMore(onLoadMoreListener: () -> Unit) {

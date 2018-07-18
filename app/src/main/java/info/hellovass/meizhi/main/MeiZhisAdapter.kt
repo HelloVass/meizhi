@@ -4,6 +4,8 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import com.bumptech.glide.Glide
 import info.hellovass.dto.MeiZhi
 import info.hellovass.dto.wap360
@@ -14,12 +16,12 @@ class MeiZhisAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.V
 
     private val meizhis: MutableList<MeiZhi> = mutableListOf()
 
-    var onMeiZhiTouchListener: OnMeiZhiTouchListener? = null
+    var mOnTouchListener: OnTouchListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         val itemView: View = inflate(R.layout.listitem_meizhis, parent, false)
-        return MeiZhiVH(itemView, onMeiZhiTouchListener)
+        return MeiZhiVH(itemView, mOnTouchListener)
     }
 
     override fun getItemCount(): Int {
@@ -47,7 +49,7 @@ class MeiZhisAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.V
         notifyItemRangeInserted(startIndex, itemCount)
     }
 
-    class MeiZhiVH(itemView: View, private val onMeiZhiTouchListener: OnMeiZhiTouchListener?) : RecyclerView.ViewHolder(itemView) {
+    class MeiZhiVH(itemView: View, private val onTouchListener: OnTouchListener?) : RecyclerView.ViewHolder(itemView) {
 
         init {
             itemView.ivCover.setOriginalSize(280, 360)
@@ -55,25 +57,30 @@ class MeiZhisAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.V
 
         fun onBindViewHolder(meiZhi: MeiZhi, position: Int) {
 
-            itemView.apply {
+            with(meiZhi) {
 
-                Glide.with(context)
+                Glide.with(itemView.context)
                         .load(meiZhi.wap360)
-                        .into(ivCover)
+                        .into(itemView.ivCover)
 
-                tvTitle.text = meiZhi.desc
-            }
+                itemView.ivCover.setOnClickListener { it ->
+                    onTouchListener?.onImageTouch(it as ImageView, itemView, meiZhi)
+                }
 
-            itemView.setOnClickListener { itemView ->
+                itemView.llBlank.setOnClickListener { it ->
+                    onTouchListener?.onBlankTouch(it as LinearLayout, itemView, meiZhi)
+                }
 
-                onMeiZhiTouchListener?.onTouch(itemView, itemView.ivCover, meiZhi)
+                itemView.tvTitle.text = meiZhi.desc
             }
         }
     }
 
-    abstract class OnMeiZhiTouchListener {
+    interface OnTouchListener {
 
-        abstract fun onTouch(view: View, imageView: View, meizhi: MeiZhi)
+        fun onImageTouch(imageArea: ImageView, view: View, meizhi: MeiZhi)
+
+        fun onBlankTouch(blankArea: LinearLayout, view: View, meizhi: MeiZhi)
     }
 }
 
