@@ -7,7 +7,6 @@ import android.net.Uri
 import android.os.Environment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.FutureTarget
-import com.bumptech.glide.request.RequestListener
 import info.hellovass.architecture.mvp.special.m.IRepo
 import io.reactivex.Maybe
 import io.reactivex.Observable

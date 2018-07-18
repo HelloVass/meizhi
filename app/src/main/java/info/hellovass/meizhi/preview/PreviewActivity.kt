@@ -48,7 +48,7 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
         super.onPostCreate(savedInstanceState)
 
         repo?.let { myRepo ->
-            myRepo.loadImage(this, imageUrl.replace("large", "wap720"))
+            myRepo.loadImage(this, imageUrl = wap720)
                     .map { result -> UIStateDTO.success(result) }
                     .onErrorReturn { result -> UIStateDTO.error(result.message) }
                     .startWith(UIStateDTO.loading())
@@ -60,7 +60,7 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
     private fun saveImageToDisk() {
 
         repo?.let { myRepo ->
-            myRepo.saveToDisk(this, imageUrl, fileName)
+            myRepo.saveToDisk(this, imageUrl = large, fileName = "$desc.jpg")
                     .map { result -> UIStateDTO.success(result) }
                     .onErrorReturn { result -> UIStateDTO.error(result.message) }
                     .startWith(UIStateDTO.loading())

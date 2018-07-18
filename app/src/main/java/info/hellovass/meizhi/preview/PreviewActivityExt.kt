@@ -3,21 +3,30 @@ package info.hellovass.meizhi.preview
 import android.Manifest
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Bundle
 import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.architecture.mvp.special.v.showToast
 import info.hellovass.dto.Status
 import info.hellovass.dto.UIStateDTO
 
-
-val PreviewActivity.imageUrl: String
+val PreviewActivity.large: String
     get() {
-        return intent.extras.getString("url", "")
+        return extras.getString("large", "")
     }
 
-val PreviewActivity.fileName: String
+val PreviewActivity.desc: String
     get() {
-        val name: String = intent.extras.getString("desc", "")
-        return "$name.jpg"
+        return extras.getString("desc", "")
+    }
+
+val PreviewActivity.wap720: String
+    get() {
+        return large.replace("large", "wap720")
+    }
+
+val PreviewActivity.extras: Bundle
+    get() {
+        return intent.extras
     }
 
 @Suppress("unused")

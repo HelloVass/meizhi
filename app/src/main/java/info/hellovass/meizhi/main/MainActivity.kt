@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
 import info.hellovass.architecture.mvp.special.v.showSnackbar
-import info.hellovass.meizhi.SpfDelegate
 import info.hellovass.dto.MeiZhi
 import info.hellovass.dto.UIStateDTO
 import info.hellovass.meizhi.R
@@ -57,7 +56,7 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
 
             override fun onTouch(view: View, imageView: View, meizhi: MeiZhi) {
 
-                val intent = intentFor<PreviewActivity>("url" to meizhi.url, "desc" to meizhi.desc)
+                val intent = intentFor<PreviewActivity>("large" to meizhi.url, "desc" to meizhi.desc)
 
                 val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this@MainActivity,
                         imageView, "picture")
@@ -97,8 +96,8 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
             pageNum = 1
         }
 
-        repo?.let { repo ->
-            repo.getMeiZhiData(count = 10, page = pageNum)
+        repo?.let { myRepo ->
+            myRepo.getMeiZhiData(count = 10, page = pageNum)
                     .map { result -> UIStateDTO.success(result) }
                     .onErrorReturn { result -> UIStateDTO.error(result.message) }
                     .startWith(UIStateDTO.loading())
