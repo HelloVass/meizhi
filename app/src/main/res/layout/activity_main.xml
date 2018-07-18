@@ -15,7 +15,9 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rcvList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:paddingEnd="4dp"
+            android:paddingStart="4dp" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

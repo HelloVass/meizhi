@@ -58,17 +58,12 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
 
             override fun onImageTouch(imageArea: ImageView, view: View, meizhi: MeiZhi) {
 
-                val intent = intentFor<PreviewActivity>("large" to meizhi.url, "desc" to meizhi.desc)
-
-                val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this@MainActivity,
-                        imageArea, "picture")
-
-                ActivityCompat.startActivity(this@MainActivity, intent, optionsCompat.toBundle())
+                redirectToPreview(meizhi, imageArea)
             }
 
             override fun onBlankTouch(blankArea: LinearLayout, view: View, meizhi: MeiZhi) {
 
-                viewDelegate?.showSnackbar("开发中...")
+                redirectToDailyDetail(meizhi)
             }
         })
 
@@ -77,6 +72,9 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
             loadData(false)
         }
     }
+
+
+
 
     override fun bindEvent() {
 
