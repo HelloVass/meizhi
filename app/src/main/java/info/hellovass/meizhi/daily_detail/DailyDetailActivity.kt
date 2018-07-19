@@ -1,4 +1,4 @@
-package info.hellovass.meizhi.dailyDetail
+package info.hellovass.meizhi.daily_detail
 
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
 

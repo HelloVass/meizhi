@@ -7,7 +7,7 @@ import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.dto.MeiZhi
 import info.hellovass.dto.Status
 import info.hellovass.dto.UIStateDTO
-import info.hellovass.meizhi.dailyDetail.DailyDetailActivity
+import info.hellovass.meizhi.daily_detail.DailyDetailActivity
 import info.hellovass.meizhi.preview.PreviewActivity
 import org.jetbrains.anko.intentFor
 

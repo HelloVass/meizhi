@@ -1,4 +1,4 @@
-package info.hellovass.meizhi.dailyDetail
+package info.hellovass.meizhi.daily_detail
 
 import android.support.v7.widget.Toolbar
 import android.view.View
@@ -12,6 +12,7 @@ class DailyDelegate : IDelegate {
     }
 
     override fun setTitle(title: String?) {
+
     }
 
     override fun setupNavigation(naviIcon: Int, onBackPressedListener: View.OnClickListener?) {
