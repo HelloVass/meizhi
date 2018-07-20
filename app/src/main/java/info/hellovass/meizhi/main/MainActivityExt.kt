@@ -9,6 +9,7 @@ import info.hellovass.dto.Status
 import info.hellovass.dto.UIStateDTO
 import info.hellovass.meizhi.dailyDetail.DailyDetailActivity
 import info.hellovass.meizhi.preview.PreviewActivity
+import info.hellovass.meizhi.settings.SettingsActivity
 import org.jetbrains.anko.intentFor
 
 fun MainActivity.dispatchResult(pullToRefresh: Boolean, uiStateDTO: UIStateDTO<List<MeiZhi>>) {
@@ -82,4 +83,9 @@ fun MainActivity.redirectToDailyDetail(meizhi: MeiZhi, imageArea: ImageView) {
 
     ActivityCompat.startActivity(this,
             intent, optionsCompat.toBundle())
+}
+
+fun MainActivity.redirectToSettings(){
+
+    startActivity(intentFor<SettingsActivity>())
 }

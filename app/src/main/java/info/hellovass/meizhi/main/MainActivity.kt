@@ -36,7 +36,7 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
             when (it.itemId) {
 
                 R.id.action_more -> {
-                    viewDelegate?.showSnackbar("更多操作")
+                    redirectToSettings()
                     true
                 }
                 else -> {
