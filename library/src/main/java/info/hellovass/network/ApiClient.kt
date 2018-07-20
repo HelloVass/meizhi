@@ -50,7 +50,7 @@ class ApiClient private constructor() {
     private fun provideGson(): Gson {
 
         return GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                 .create()
     }
 
