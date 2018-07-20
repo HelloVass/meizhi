@@ -3,16 +3,20 @@ package info.hellovass.meizhi.dailyDetail
 import android.os.Bundle
 import android.view.View
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
+import info.hellovass.architecture.mvp.special.v.showSnackbar
+import info.hellovass.dto.Category
 import info.hellovass.dto.UIStateDTO
 import info.hellovass.ext.`formatAs`
 import info.hellovass.imageloader.GlideLoader
 import info.hellovass.meizhi.R
 import info.hellovass.network.RxSchedulersHelper
+import org.jetbrains.anko.browse
 
 class DailyDetailActivity : ActivityPresenter<DailyDeatilDelegate, DailyDetailRepo>() {
 
     override fun createViewDelegate(): DailyDeatilDelegate? {
-        return DailyDeatilDelegate(this)
+
+        return DailyDeatilDelegate(this, DailyDetailAdapter(this))
     }
 
     override fun createRepo(): DailyDetailRepo? {
@@ -21,11 +25,22 @@ class DailyDetailActivity : ActivityPresenter<DailyDeatilDelegate, DailyDetailRe
 
     override fun initWidgets() {
 
+        // 设置返回按钮
         viewDelegate?.setupNavigation(R.drawable.ic_navi_back, View.OnClickListener {
             onBackPressed()
         })
 
+        // 设置标题
         viewDelegate?.setTitle(publishedAt.formatAs("yyyy-MM-dd"))
+
+        // 设置列表
+        viewDelegate?.setupRcvList(object : OnItemClickListener {
+
+            override fun onItemClick(view: View, category: Category, position: Int) {
+
+                viewDelegate?.showSnackbar("开发中...")
+            }
+        })
     }
 
     override fun bindEvent() {

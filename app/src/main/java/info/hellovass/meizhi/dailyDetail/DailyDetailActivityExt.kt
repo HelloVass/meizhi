@@ -2,9 +2,8 @@ package info.hellovass.meizhi.dailyDetail
 
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import info.hellovass.architecture.mvp.special.v.showSnackbar
-import info.hellovass.dto.DailyDetail
+import info.hellovass.dto.Category
 import info.hellovass.dto.Status
 import info.hellovass.dto.UIStateDTO
 import java.util.*
@@ -27,19 +26,33 @@ val DailyDetailActivity.extras: Bundle
 fun DailyDetailActivity.dispatchBitmap(uiStateDTO: UIStateDTO<Bitmap>) {
 
     when (uiStateDTO.status) {
-        Status.Loading -> {
 
+        Status.Loading -> {
+            viewDelegate?.showProgressbar()
         }
         Status.Succeed -> {
+            viewDelegate?.hideProgressbar()
             viewDelegate?.setBitmap(uiStateDTO.getData())
         }
         Status.Failed -> {
+            viewDelegate?.hideProgressbar()
             viewDelegate?.showSnackbar(uiStateDTO.getError())
         }
     }
 }
 
-fun DailyDetailActivity.dispatchDailyDetail(uiStateDTO: UIStateDTO<DailyDetail>?) {
+fun DailyDetailActivity.dispatchDailyDetail(uiStateDTO: UIStateDTO<List<Category>>) {
 
-    Log.d("json", uiStateDTO.toString())
+    when (uiStateDTO.status) {
+
+        Status.Loading -> {
+
+        }
+        Status.Succeed -> {
+            viewDelegate?.setItems(uiStateDTO.getData())
+        }
+        Status.Failed -> {
+            viewDelegate?.showSnackbar(uiStateDTO.getError())
+        }
+    }
 }

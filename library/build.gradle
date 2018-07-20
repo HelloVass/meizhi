@@ -46,11 +46,14 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     // anko
     api 'org.jetbrains.anko:anko:0.10.5'
+    api "org.jetbrains.anko:anko-commons:0.10.5"
     // PhotoView
     api 'com.github.chrisbanes:PhotoView:2.1.4'
     api 'com.android.support:design:27.1.1'
     // rxpermissions
     api 'com.github.tbruyelle:rxpermissions:0.10.2'
+
+
 }
 repositories {
     mavenCentral()
