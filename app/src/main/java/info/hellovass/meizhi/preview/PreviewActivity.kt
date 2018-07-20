@@ -5,7 +5,9 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import com.github.chrisbanes.photoview.OnViewTapListener
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
+import info.hellovass.disk.DiskHelperDelegate
 import info.hellovass.dto.UIStateDTO
+import info.hellovass.imageloader.GlideLoader
 import info.hellovass.meizhi.R
 import info.hellovass.network.RxSchedulersHelper
 
@@ -13,7 +15,10 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
 
     override fun createViewDelegate(): PreviewDelegate? = PreviewDelegate(this)
 
-    override fun createRepo(): PreviewRepo? = PreviewRepo()
+    override fun createRepo(): PreviewRepo? {
+
+        return PreviewRepo(GlideLoader(), DiskHelperDelegate())
+    }
 
     override fun initWidgets() {}
 
@@ -60,7 +65,7 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
     private fun saveImageToDisk() {
 
         repo?.let { myRepo ->
-            myRepo.saveToDisk(this, imageUrl = large, fileName = "$desc.jpg")
+            myRepo.saveToDisk(this, imageUrl = url, fileName = "$desc.jpg", saveDirPath = saveDir)
                     .map { result -> UIStateDTO.success(result) }
                     .onErrorReturn { result -> UIStateDTO.error(result.message) }
                     .startWith(UIStateDTO.loading())

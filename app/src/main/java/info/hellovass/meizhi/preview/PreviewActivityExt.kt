@@ -4,14 +4,15 @@ import android.Manifest
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import info.hellovass.architecture.mvp.special.v.showSnackbar
-import info.hellovass.architecture.mvp.special.v.showToast
 import info.hellovass.dto.Status
 import info.hellovass.dto.UIStateDTO
+import java.io.File
 
-val PreviewActivity.large: String
+val PreviewActivity.url: String
     get() {
-        return extras.getString("large", "")
+        return extras.getString("url", "")
     }
 
 val PreviewActivity.desc: String
@@ -21,12 +22,7 @@ val PreviewActivity.desc: String
 
 val PreviewActivity.wap720: String
     get() {
-        return large.replace("large", "wap720")
-    }
-
-val PreviewActivity.extras: Bundle
-    get() {
-        return intent.extras
+        return url.replace("large", "wap720")
     }
 
 @Suppress("unused")
@@ -34,6 +30,18 @@ val PreviewActivity.permission: String
     get() {
         return Manifest.permission.WRITE_EXTERNAL_STORAGE
     }
+
+@Suppress("unused")
+val PreviewActivity.saveDir: String
+    get() {
+        return File(Environment.getExternalStorageDirectory(), "MeiZhi").absolutePath
+    }
+
+val PreviewActivity.extras: Bundle
+    get() {
+        return intent.extras
+    }
+
 
 fun PreviewActivity.dispatchBitmap(uiStateDTO: UIStateDTO<Bitmap>) {
 
@@ -60,7 +68,7 @@ fun PreviewActivity.dispatchUri(uiStateDTO: UIStateDTO<Uri>) {
             // do nothing
         }
         Status.Succeed -> {
-            viewDelegate?.showSnackbar("{图片已保存至${PreviewRepo.saveDir}目录下}")
+            viewDelegate?.showSnackbar("{图片已保存至${saveDir}目录下}")
             viewDelegate?.notifyGallery(uiStateDTO.getData())
         }
         Status.Failed -> {

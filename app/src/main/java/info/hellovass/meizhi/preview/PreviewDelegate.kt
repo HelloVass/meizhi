@@ -4,10 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import android.widget.ImageView
-import android.widget.ProgressBar
-import com.bumptech.glide.Glide
 import com.github.chrisbanes.photoview.OnViewTapListener
 import com.github.chrisbanes.photoview.PhotoView
 import info.hellovass.architecture.mvp.special.v.ActivityDelegate
@@ -19,8 +16,8 @@ class PreviewDelegate(activity: AppCompatActivity) : ActivityDelegate(activity) 
 
     fun setBitmap(bitmap: Bitmap) {
 
-       find<ImageView>(R.id.ivPreview)
-               .setImageBitmap(bitmap)
+        find<ImageView>(R.id.ivPreview)
+                .setImageBitmap(bitmap)
     }
 
     fun bindOnViewTapListener(onViewTapListener: OnViewTapListener) {

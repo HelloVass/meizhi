@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import com.bumptech.glide.Glide
 import info.hellovass.dto.MeiZhi
 import info.hellovass.dto.wap360
@@ -67,8 +66,8 @@ class MeiZhisAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.V
                     onTouchListener?.onImageTouch(it as ImageView, itemView, meiZhi)
                 }
 
-                itemView.llBlank.setOnClickListener { it ->
-                    onTouchListener?.onBlankTouch(it as LinearLayout, itemView, meiZhi)
+                itemView.llBlank.setOnClickListener { _ ->
+                    onTouchListener?.onBlankTouch(itemView.ivCover, itemView, meiZhi)
                 }
 
                 itemView.tvTitle.text = meiZhi.desc
@@ -80,7 +79,7 @@ class MeiZhisAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.V
 
         fun onImageTouch(imageArea: ImageView, view: View, meizhi: MeiZhi)
 
-        fun onBlankTouch(blankArea: LinearLayout, view: View, meizhi: MeiZhi)
+        fun onBlankTouch(imageArea: ImageView, view: View, meizhi: MeiZhi)
     }
 }
 

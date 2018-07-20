@@ -7,7 +7,7 @@ import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.dto.MeiZhi
 import info.hellovass.dto.Status
 import info.hellovass.dto.UIStateDTO
-import info.hellovass.meizhi.daily_detail.DailyDetailActivity
+import info.hellovass.meizhi.dailyDetail.DailyDetailActivity
 import info.hellovass.meizhi.preview.PreviewActivity
 import org.jetbrains.anko.intentFor
 
@@ -62,7 +62,7 @@ fun MainActivity.handleLoadMore(uiStateDTO: UIStateDTO<List<MeiZhi>>) {
 
 fun MainActivity.redirectToPreview(meizhi: MeiZhi, imageArea: ImageView) {
 
-    val intent = intentFor<PreviewActivity>("large" to meizhi.url,
+    val intent = intentFor<PreviewActivity>("url" to meizhi.url,
             "desc" to meizhi.desc)
 
     val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
@@ -72,7 +72,14 @@ fun MainActivity.redirectToPreview(meizhi: MeiZhi, imageArea: ImageView) {
             intent, optionsCompat.toBundle())
 }
 
-fun MainActivity.redirectToDailyDetail(meizhi: MeiZhi) {
+fun MainActivity.redirectToDailyDetail(meizhi: MeiZhi, imageArea: ImageView) {
 
-    startActivity(intentFor<DailyDetailActivity>())
+    val intent = intentFor<DailyDetailActivity>("url" to meizhi.url,
+            "desc" to meizhi.desc)
+
+    val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+            imageArea, "picture")
+
+    ActivityCompat.startActivity(this,
+            intent, optionsCompat.toBundle())
 }

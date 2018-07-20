@@ -1,20 +1,15 @@
 package info.hellovass.meizhi.main
 
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
 import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.dto.MeiZhi
 import info.hellovass.dto.UIStateDTO
 import info.hellovass.meizhi.R
-import info.hellovass.meizhi.preview.PreviewActivity
 import info.hellovass.network.RxSchedulersHelper
-import org.jetbrains.anko.intentFor
 
 class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
 
@@ -61,9 +56,9 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
                 redirectToPreview(meizhi, imageArea)
             }
 
-            override fun onBlankTouch(blankArea: LinearLayout, view: View, meizhi: MeiZhi) {
+            override fun onBlankTouch(imageArea: ImageView, view: View, meizhi: MeiZhi) {
 
-                redirectToDailyDetail(meizhi)
+                redirectToDailyDetail(meizhi, imageArea)
             }
         })
 
@@ -72,9 +67,6 @@ class MainActivity : ActivityPresenter<MainDelegate, MainRepo>() {
             loadData(false)
         }
     }
-
-
-
 
     override fun bindEvent() {
 

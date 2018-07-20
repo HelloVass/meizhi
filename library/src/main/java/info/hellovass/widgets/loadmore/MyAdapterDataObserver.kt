@@ -1,7 +1,6 @@
 package info.hellovass.widgets.loadmore
 
 import android.support.v7.widget.RecyclerView
-import info.hellovass.widgets.loadmore.LoadMoreWrapper
 
 class MyAdapterDataObserver(private val loadMoreWrapper: LoadMoreWrapper) : RecyclerView.AdapterDataObserver() {
 

@@ -27,7 +27,7 @@
 
         </activity>
 
-        <activity android:name=".daily_detail.DailyDetailActivity">
+        <activity android:name=".dailyDetail.DailyDetailActivity">
 
         </activity>
 
