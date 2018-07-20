@@ -1,5 +1,7 @@
 package info.hellovass.network
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import io.reactivex.schedulers.Schedulers
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -25,7 +27,7 @@ class ApiClient private constructor() {
 
         mRetrofit = Retrofit.Builder()
                 .baseUrl(Constant.SERVER_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(provideGson()))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .client(provideOkHttpClient())
                 .build()
@@ -43,6 +45,13 @@ class ApiClient private constructor() {
     private fun provideLogInterceptor(): Interceptor {
 
         return HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
+
+    private fun provideGson(): Gson {
+
+        return GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+                .create()
     }
 
     fun <T> provideApi(service: Class<T>): T {

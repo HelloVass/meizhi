@@ -2,13 +2,16 @@ package info.hellovass.meizhi.dailyDetail
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import info.hellovass.architecture.mvp.special.v.showSnackbar
+import info.hellovass.dto.DailyDetail
 import info.hellovass.dto.Status
 import info.hellovass.dto.UIStateDTO
+import java.util.*
 
-val DailyDetailActivity.desc: String
+val DailyDetailActivity.publishedAt: Date
     get() {
-        return extras.getString("desc", "")
+        return extras.getSerializable("publishedAt") as Date
     }
 
 val DailyDetailActivity.wap720: String
@@ -34,4 +37,9 @@ fun DailyDetailActivity.dispatchBitmap(uiStateDTO: UIStateDTO<Bitmap>) {
             viewDelegate?.showSnackbar(uiStateDTO.getError())
         }
     }
+}
+
+fun DailyDetailActivity.dispatchDailyDetail(uiStateDTO: UIStateDTO<DailyDetail>?) {
+
+    Log.d("json", uiStateDTO.toString())
 }

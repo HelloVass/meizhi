@@ -1,10 +1,12 @@
 package info.hellovass.dto
 
+import java.util.*
+
 
 data class MeiZhi(val _id: String,
-                  val createdAt: String,
+                  val createdAt: Date,
                   val desc: String,
-                  val publishedAt: String,
+                  val publishedAt: Date,
                   val source: String,
                   val type: String,
                   val url: String,

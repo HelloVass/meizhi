@@ -75,7 +75,7 @@ fun MainActivity.redirectToPreview(meizhi: MeiZhi, imageArea: ImageView) {
 fun MainActivity.redirectToDailyDetail(meizhi: MeiZhi, imageArea: ImageView) {
 
     val intent = intentFor<DailyDetailActivity>("url" to meizhi.url,
-            "desc" to meizhi.desc)
+            "publishedAt" to meizhi.publishedAt)
 
     val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
             imageArea, "picture")

@@ -1,4 +1,4 @@
-package info.hellovass.meizhi.widgets
+package info.hellovass.widgets
 
 import android.content.Context
 import android.util.AttributeSet
