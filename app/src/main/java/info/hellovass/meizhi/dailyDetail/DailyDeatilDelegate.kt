@@ -1,9 +1,11 @@
 package info.hellovass.meizhi.dailyDetail
 
 import android.graphics.Bitmap
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.widget.ImageView
 import info.hellovass.architecture.mvp.special.v.ActivityDelegate
 import info.hellovass.meizhi.R
@@ -26,5 +28,11 @@ class DailyDeatilDelegate(activity: AppCompatActivity, private val viewAdapter: 
         rcvList.layoutManager = LinearLayoutManager(activity)
         rcvList.adapter = viewAdapter
         viewAdapter.onItemClickListener = onItemClickListener
+    }
+
+    fun bindVideoPlayEvent(listener: View.OnClickListener) {
+
+        find<FloatingActionButton>(R.id.fabVideo)
+                .setOnClickListener(listener)
     }
 }

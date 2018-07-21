@@ -45,6 +45,9 @@ class DailyDetailActivity : ActivityPresenter<DailyDeatilDelegate, DailyDetailRe
 
     override fun bindEvent() {
 
+        viewDelegate?.bindVideoPlayEvent(View.OnClickListener {
+            viewDelegate?.showSnackbar("开发中...")
+        })
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

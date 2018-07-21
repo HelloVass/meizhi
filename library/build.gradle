@@ -31,6 +31,7 @@ dependencies {
     //support
     api 'com.android.support:appcompat-v7:27.1.1'
     api 'com.android.support:recyclerview-v7:27.1.1'
+    api 'com.android.support:design:27.1.1'
     // okhttp
     api 'com.squareup.okhttp3:okhttp:3.10.0'
     api 'com.squareup.okhttp3:logging-interceptor:3.10.0'
@@ -49,7 +50,7 @@ dependencies {
     api "org.jetbrains.anko:anko-commons:0.10.5"
     // PhotoView
     api 'com.github.chrisbanes:PhotoView:2.1.4'
-    api 'com.android.support:design:27.1.1'
+
     // rxpermissions
     api 'com.github.tbruyelle:rxpermissions:0.10.2'
 
