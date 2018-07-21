@@ -35,6 +35,10 @@
 
         </activity>
 
+        <activity android:name=".browser.BrowserActivity">
+
+        </activity>
+
     </application>
 
 </manifest>

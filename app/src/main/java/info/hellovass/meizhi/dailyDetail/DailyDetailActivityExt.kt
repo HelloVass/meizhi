@@ -1,11 +1,15 @@
 package info.hellovass.meizhi.dailyDetail
 
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.support.customtabs.CustomTabsIntent
 import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.dto.Category
 import info.hellovass.dto.Status
 import info.hellovass.dto.UIStateDTO
+import info.hellovass.meizhi.browser.BrowserActivity
+import org.jetbrains.anko.intentFor
 import java.util.*
 
 val DailyDetailActivity.publishedAt: Date
@@ -55,4 +59,11 @@ fun DailyDetailActivity.dispatchDailyDetail(uiStateDTO: UIStateDTO<List<Category
             viewDelegate?.showSnackbar(uiStateDTO.getError())
         }
     }
+}
+
+fun DailyDetailActivity.redirectToBrowser(category: Category) {
+
+    CustomTabsIntent.Builder()
+            .build()
+            .launchUrl(this, Uri.parse(category.url))
 }

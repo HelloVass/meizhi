@@ -3,14 +3,12 @@ package info.hellovass.meizhi.dailyDetail
 import android.os.Bundle
 import android.view.View
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
-import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.dto.Category
 import info.hellovass.dto.UIStateDTO
 import info.hellovass.ext.`formatAs`
 import info.hellovass.imageloader.GlideLoader
 import info.hellovass.meizhi.R
 import info.hellovass.network.RxSchedulersHelper
-import org.jetbrains.anko.browse
 
 class DailyDetailActivity : ActivityPresenter<DailyDeatilDelegate, DailyDetailRepo>() {
 
@@ -38,7 +36,7 @@ class DailyDetailActivity : ActivityPresenter<DailyDeatilDelegate, DailyDetailRe
 
             override fun onItemClick(view: View, category: Category, position: Int) {
 
-                viewDelegate?.showSnackbar("开发中...")
+                redirectToBrowser(category)
             }
         })
     }
@@ -46,7 +44,7 @@ class DailyDetailActivity : ActivityPresenter<DailyDeatilDelegate, DailyDetailRe
     override fun bindEvent() {
 
         viewDelegate?.bindVideoPlayEvent(View.OnClickListener {
-            viewDelegate?.showSnackbar("开发中...")
+
         })
     }
 
