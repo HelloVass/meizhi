@@ -5,7 +5,6 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.ImageView
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
-import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.dto.MeiZhi
 import info.hellovass.dto.UIStateDTO
 import info.hellovass.meizhi.R

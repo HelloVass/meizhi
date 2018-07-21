@@ -5,12 +5,15 @@ import android.view.View
 import info.hellovass.architecture.mvp.special.p.ActivityPresenter
 import info.hellovass.dto.Category
 import info.hellovass.dto.UIStateDTO
-import info.hellovass.ext.`formatAs`
+import info.hellovass.ext.formatAs
 import info.hellovass.imageloader.GlideLoader
 import info.hellovass.meizhi.R
 import info.hellovass.network.RxSchedulersHelper
 
 class DailyDetailActivity : ActivityPresenter<DailyDeatilDelegate, DailyDetailRepo>() {
+
+    // 视频内容
+    var videoCategory: Category? = null
 
     override fun createViewDelegate(): DailyDeatilDelegate? {
 
@@ -45,6 +48,7 @@ class DailyDetailActivity : ActivityPresenter<DailyDeatilDelegate, DailyDetailRe
 
         viewDelegate?.bindVideoPlayEvent(View.OnClickListener {
 
+            redirectToBrowser(videoCategory)
         })
     }
 
