@@ -1,5 +1,7 @@
 package info.hellovass.architecture.mvp.special.v
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.View

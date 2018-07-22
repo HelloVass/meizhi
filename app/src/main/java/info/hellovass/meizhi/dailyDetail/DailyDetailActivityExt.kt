@@ -1,5 +1,7 @@
 package info.hellovass.meizhi.dailyDetail
 
+import android.app.PendingIntent
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
@@ -9,6 +11,7 @@ import info.hellovass.architecture.mvp.special.v.showSnackbar
 import info.hellovass.dto.Category
 import info.hellovass.dto.Status
 import info.hellovass.dto.UIStateDTO
+import info.hellovass.meizhi.broadcast.ShareBroadcastReceiver
 import java.util.*
 
 val DailyDetailActivity.publishedAt: Date
@@ -68,12 +71,25 @@ fun DailyDetailActivity.dispatchDailyDetail(uiStateDTO: UIStateDTO<List<Category
 
 fun DailyDetailActivity.redirectToBrowser(category: Category?) {
 
+    val url: String? = category?.url
+
     val customTabsIntent = CustomTabsIntent.Builder()
             .setShowTitle(true)
             .setToolbarColor(Color.parseColor("#795548"))
+            .addMenuItem("分享", sharePendingIntent())
             .build()
 
-    val url = Uri.parse(category?.url)
+    customTabsIntent.launchUrl(this, Uri.parse(url))
+}
 
-    customTabsIntent.launchUrl(this, url)
+fun DailyDetailActivity.sharePendingIntent(): PendingIntent {
+
+    val intent = Intent(this, ShareBroadcastReceiver::class.java)
+
+    val flag = PendingIntent.FLAG_CANCEL_CURRENT
+
+    return PendingIntent.getBroadcast(this,
+            0,
+            intent,
+            flag)
 }

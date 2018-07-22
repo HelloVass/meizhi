@@ -10,6 +10,7 @@ import info.hellovass.dto.UIStateDTO
 import info.hellovass.imageloader.GlideLoader
 import info.hellovass.meizhi.R
 import info.hellovass.network.RxSchedulersHelper
+import org.jetbrains.anko.share
 
 class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
 
@@ -36,6 +37,7 @@ class PreviewActivity : ActivityPresenter<PreviewDelegate, PreviewRepo>() {
                     true
                 }
                 R.id.action_share -> {
+                    share(text = url, subject = "链接")
                     true
                 }
                 else -> {

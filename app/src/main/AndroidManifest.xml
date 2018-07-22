@@ -35,9 +35,9 @@
 
         </activity>
 
-        <activity android:name=".browser.BrowserActivity">
+        <receiver android:name=".broadcast.ShareBroadcastReceiver">
 
-        </activity>
+        </receiver>
 
     </application>
 
