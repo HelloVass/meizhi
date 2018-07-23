@@ -13,7 +13,7 @@ data class MeiZhi(val _id: String,
                   val used: Boolean,
                   val who: String)
 
-val MeiZhi.wap360: String
+val MeiZhi.wap720: String
     get() {
-        return url.replace("large", "wap360")
+        return url.replace("large", "wap720")
     }

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import info.hellovass.dto.MeiZhi
-import info.hellovass.dto.wap360
+import info.hellovass.dto.wap720
 import info.hellovass.meizhi.R
 import kotlinx.android.synthetic.main.listitem_meizhis.view.*
 
@@ -59,7 +59,7 @@ class MeiZhisAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.V
             with(meiZhi) {
 
                 Glide.with(itemView.context)
-                        .load(meiZhi.wap360)
+                        .load(meiZhi.wap720)
                         .into(itemView.ivCover)
 
                 itemView.ivCover.setOnClickListener { it ->

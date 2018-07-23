@@ -51,7 +51,6 @@ dependencies {
     api "org.jetbrains.anko:anko-commons:0.10.5"
     // PhotoView
     api 'com.github.chrisbanes:PhotoView:2.1.4'
-
     // rxpermissions
     api 'com.github.tbruyelle:rxpermissions:0.10.2'
 
