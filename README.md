@@ -47,6 +47,8 @@
 * 集合提供的 flatMap、find 方法
 * 更多介绍可能会写篇博客分享啥的，随缘吧
 
+## 效果图
+![煎牛排](http://7xsq1h.com1.z0.glb.clouddn.com/%E7%85%8E%E7%89%9B%E6%8E%92%EF%BC%8C%E8%BF%98%E4%B8%8D%E6%98%AF%E7%BE%8E%E6%BB%8B%E6%BB%8B.gif)
 
 
 
