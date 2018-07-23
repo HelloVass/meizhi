@@ -17,7 +17,7 @@
 ## 项目架构
 
 * 基于 [TheMvp](https://github.com/kymjs/TheMVP)  改进而来的 Mvp，具体可以参考 [作者的这篇博客](https://www.kymjs.com/code/2015/11/09/01/)。
-* 基于 Rxjava 实现的 UI 层状态管理，这里点名表扬下我好的基友祥哥，感谢他[翻译的文章](http://blog.licrafter.com/2018/05/06/ManagingStateWithRxJava/)
+* 基于 Rxjava 实现的 UI 层状态管理，这里点名表扬下我的好基友祥哥，感谢他[翻译的文章](http://blog.licrafter.com/2018/05/06/ManagingStateWithRxJava/)
 
 
 
