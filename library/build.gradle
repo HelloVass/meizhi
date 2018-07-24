@@ -53,8 +53,6 @@ dependencies {
     api 'com.github.chrisbanes:PhotoView:2.1.4'
     // rxpermissions
     api 'com.github.tbruyelle:rxpermissions:0.10.2'
-
-
 }
 repositories {
     mavenCentral()

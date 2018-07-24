@@ -15,14 +15,18 @@ interface Action {
 
 class DailyDetailAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Action {
 
-    var onItemClickListener: OnItemClickListener? = null
+    val catrgorys: MutableList<Category> = mutableListOf()
+
+    private var onItemClickListener: OnItemClickListener? = null
 
     companion object {
+
+        // 分组
         const val TYPE_SECTION = 1
+
+        // 普通项目
         const val TYPE_ITEM = TYPE_SECTION + 1
     }
-
-    val catrgorys: MutableList<Category> = mutableListOf()
 
     override fun getItemViewType(position: Int): Int {
 
@@ -67,6 +71,10 @@ class DailyDetailAdapter(val context: Context) : RecyclerView.Adapter<RecyclerVi
         notifyDataSetChanged()
     }
 
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.onItemClickListener = onItemClickListener
+    }
+
     inner class SectionVH(itemview: View) : RecyclerView.ViewHolder(itemview) {
 
         fun onBindViewHolder(category: Category, position: Int) {
@@ -97,10 +105,10 @@ class DailyDetailAdapter(val context: Context) : RecyclerView.Adapter<RecyclerVi
             }
         }
     }
+
+    interface OnItemClickListener {
+
+        fun onItemClick(view: View, category: Category, position: Int)
+    }
 }
 
-
-interface OnItemClickListener {
-
-    fun onItemClick(view: View, category: Category, position: Int)
-}

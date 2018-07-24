@@ -15,12 +15,12 @@ class MeiZhisAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.V
 
     private val meizhis: MutableList<MeiZhi> = mutableListOf()
 
-    var mOnTouchListener: OnTouchListener? = null
+    private var onTouchListener: OnTouchListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         val itemView: View = inflate(R.layout.listitem_meizhis, parent, false)
-        return MeiZhiVH(itemView, mOnTouchListener)
+        return MeiZhiVH(itemView)
     }
 
     override fun getItemCount(): Int {
@@ -48,12 +48,18 @@ class MeiZhisAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.V
         notifyItemRangeInserted(startIndex, itemCount)
     }
 
-    class MeiZhiVH(itemView: View, private val onTouchListener: OnTouchListener?) : RecyclerView.ViewHolder(itemView) {
+    fun setOnTouchListener(onTouchListener: OnTouchListener) {
+
+        this.onTouchListener = onTouchListener
+    }
+
+    inner class MeiZhiVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         init {
             itemView.ivCover.setOriginalSize(280, 360)
         }
 
+        @Suppress("UNUSED_PARAMETER")
         fun onBindViewHolder(meiZhi: MeiZhi, position: Int) {
 
             with(meiZhi) {
@@ -82,6 +88,8 @@ class MeiZhisAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.V
         fun onBlankTouch(imageArea: ImageView, view: View, meizhi: MeiZhi)
     }
 }
+
+
 
 
 

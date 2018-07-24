@@ -38,7 +38,7 @@ class MainDelegate(activity: AppCompatActivity) : ActivityDelegate(activity), IL
                 StaggeredGridLayoutManager.VERTICAL)
         viewAdapter = MeiZhisAdapter(activity)
         rcvList.adapter = viewAdapter
-        viewAdapter.mOnTouchListener = onTouchListener
+        viewAdapter.setOnTouchListener(onTouchListener)
     }
 
     fun setupLoadMore(onLoadMoreListener: () -> Unit) {

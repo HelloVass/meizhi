@@ -35,7 +35,7 @@ class DailyDetailActivity : ActivityPresenter<DailyDeatilDelegate, DailyDetailRe
         viewDelegate?.setTitle(publishedAt.formatAs("yyyy-MM-dd"))
 
         // 设置列表
-        viewDelegate?.setupRcvList(object : OnItemClickListener {
+        viewDelegate?.setupRcvList(object : DailyDetailAdapter.OnItemClickListener {
 
             override fun onItemClick(view: View, category: Category, position: Int) {
 

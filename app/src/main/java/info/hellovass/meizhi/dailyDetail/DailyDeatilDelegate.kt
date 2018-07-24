@@ -22,12 +22,12 @@ class DailyDeatilDelegate(activity: AppCompatActivity, private val viewAdapter: 
                 .setImageBitmap(bitmap)
     }
 
-    fun setupRcvList(onItemClickListener: OnItemClickListener) {
+    fun setupRcvList(onItemClickListener: DailyDetailAdapter.OnItemClickListener) {
 
         rcvList = find(R.id.rcvList)
         rcvList.layoutManager = LinearLayoutManager(activity)
         rcvList.adapter = viewAdapter
-        viewAdapter.onItemClickListener = onItemClickListener
+        viewAdapter.setOnItemClickListener(onItemClickListener)
     }
 
     fun bindVideoPlayEvent(listener: View.OnClickListener) {

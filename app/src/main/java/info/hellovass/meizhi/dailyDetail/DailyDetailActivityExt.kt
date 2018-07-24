@@ -29,7 +29,6 @@ val DailyDetailActivity.extras: Bundle
         return intent.extras
     }
 
-
 fun DailyDetailActivity.dispatchBitmap(uiStateDTO: UIStateDTO<Bitmap>) {
 
     when (uiStateDTO.status) {
