@@ -1,14 +1,26 @@
 package info.hellovass.android.mvvmlite
 
 import android.arch.lifecycle.ViewModelProviders
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 
-fun <ViewModel : BaseViewModel<S>, S : IState> activityViewModel(
+fun <VM : BaseViewModel<S>, S : IState> activityViewModel(
     activity: FragmentActivity,
-    viewModelClass: Class<ViewModel>
-): ViewModel {
+    viewModelClass: Class<VM>
+): VM {
     return ViewModelProviders.of(
         activity,
-        ViewModelFactory.create(viewModelClass = viewModelClass)
+        ViewModelProviderFactoryImpl()
     ).get(viewModelClass)
 }
+
+fun <VM : BaseViewModel<S>, S : IState> fragmentViewModel(
+    fragment: Fragment,
+    viewModelClass: Class<VM>
+): VM {
+    return ViewModelProviders.of(
+        fragment,
+        ViewModelProviderFactoryImpl()
+    ).get(viewModelClass)
+}
+
